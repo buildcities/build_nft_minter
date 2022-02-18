@@ -1,0 +1,11 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@redwoodjs/api": "v0.44.1",
+    "@redwoodjs/graphql-server": "v0.44.1",
+    "@supabase/supabase-js": "^1.30.0",
+    "moralis": "^1.3.1"
+  }
+}
