@@ -20,12 +20,22 @@ module.exports = {
   ignorePatterns: [
     "/lib/**/*", // Ignore built files.
   ],
-  plugins: [
-    "@typescript-eslint",
-    "import",
-  ],
+  plugins: ["@typescript-eslint", "import"],
   rules: {
     "quotes": ["error", "double"],
     "import/no-unresolved": 0,
+    "object-curly-spacing": "off",
+    "no-tabs": "off",
+    "indent": "off",
+    "@typescript-eslint/object-curly-spacing": "off",
+    "spaced-comment": "off",
+    "new-cap": "off",
+    "camelcase": "off",
+    "no-case-declarations": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "max-len": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-inferrable-types": "off",
+    "space-before-function-paren": "off",
   },
 };

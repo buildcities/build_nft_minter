@@ -1,24 +1,25 @@
 import { Router } from "express";
 import * as functions from "firebase-functions";
 import * as fs from "fs";
-import { promisify } from "util";
-import * as rimraf from "rimraf";
+import * as os from "os";
+import * as path from "path";
+import * as mkdirp from "mkdirp";
 
 import { BrowserContext } from "puppeteer";
 import { passportUrls } from "./presets";
 
 import { PuppeteerScreenRecorder } from "puppeteer-screen-recorder";
 import { uploadToStorage } from "./utils";
-const deleteFiles = promisify(rimraf);
-const getFile = promisify(fs.readFile);
 /* const fileName = "./temp/video.mp4"; */
 const router = Router();
+const PRE_START_WAIT_TIME = 25000;
 
-router.get("/:type", async (req, res) => {
+router.get("/:type/:duration", async (req, res) => {
   functions.logger.info("logging info", { structuredData: true });
   const url = passportUrls[req.params.type] || "unknown";
   //const uploadStream = new PassThrough()
-
+  //const duration = +req.params.duration || 0.5;
+  //const record_time = duration * 60000;
   switch (url) {
     case "unknown":
       res.send("Invalid request parameter");
@@ -26,22 +27,30 @@ router.get("/:type", async (req, res) => {
     default:
       try {
         const browser = res.locals.browser as BrowserContext;
-        const fileName = `./temp/${req.params.type}.mp4`;
+        const filePath = `${req.params.type}.mp4`;
+        const tempLocalFile = path.join(os.tmpdir(), filePath);
+        const tempLocalDir = path.dirname(tempLocalFile);
+
         const page = await browser.newPage();
-        page.setDefaultTimeout(0);
-        await page.goto(url);
-        await page.waitForTimeout(25000);
+        await page.setDefaultNavigationTimeout(0);
+        await page.goto(url, { timeout: 0 });
+        await page.waitForTimeout(PRE_START_WAIT_TIME);
         const recorder = new PuppeteerScreenRecorder(page);
-        await recorder.start(fileName);
-        await page.waitForTimeout(20000);
+        //create temp file directory
+        await mkdirp(tempLocalDir);
+        //begin recording and save to tempfile
+        await recorder.start(tempLocalFile);
+        await page.waitForTimeout(60000);
         await recorder.stop();
-        //const stream = fs.createReadStream(fileName);
-        const file = await getFile(fileName);
+        //upload recorded file to cloud storage
+        //const file = await getFile(fileName);
         const { data } = await uploadToStorage(
-          file,
+          tempLocalFile,
           `video/${req.params.type}.mp4`
         );
-        await deleteFiles(fileName);
+        // delete temp files
+        await fs.unlinkSync(tempLocalFile);
+        // return a message to browser
         res.setHeader("Content-Type", "text/plain");
         res.send(`Video uploaded here :${data?.publicURL}`);
         browser.close();

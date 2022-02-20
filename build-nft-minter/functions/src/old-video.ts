@@ -3,7 +3,7 @@ import * as functions from "firebase-functions";
 //import { debug } from "firebase-functions/logger";
 import { BrowserContext } from "puppeteer";
 import { passportUrls } from "./presets";
-import * as utils from './utils'
+import * as utils from "./utils";
 const router = Router();
 
 router.get("/:type", async (req, res) => {
@@ -43,7 +43,7 @@ router.get("/:type", async (req, res) => {
             //console.log(data.length);
             const url = URL.createObjectURL(
               new Blob(data, { type: "video/webm" })
-            ); 
+            );
             resolve(url || false);
           };
           recorder.onerror = reject;
@@ -56,16 +56,18 @@ router.get("/:type", async (req, res) => {
       });
 
       functions.logger.info(result, { structuredData: true });
-      
-      await page.waitForFunction(async(utils:any)=>{
-        return await utils.uploadToStorage('hello bambi','myVid.txt')
-        
-      },{},utils as any)
-     
+
+      await page.waitForFunction(
+        async (utils: any) => {
+          return await utils.uploadToStorage("hello bambi", "myVid.txt");
+        },
+        {},
+        utils as any
+      );
 
       const image = await page.screenshot();
       res.setHeader("Content-Type", "image/png");
-      
+
       res.send(image);
       browser.close();
   }

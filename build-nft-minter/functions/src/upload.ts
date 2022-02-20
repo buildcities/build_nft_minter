@@ -17,17 +17,16 @@ router.get("/:type", async (req, res) => {
       res.send("Invalid request parameter");
       break;
     default:
-        try{
-            const file = fs.readFileSync(fileName);
-            if (file) {
-              const url=await uploadToStorage(file, "video-master.mp4");
-              res.send(`uploaded here: ${url.publicURL}`);
-            } 
-        }catch(err){
-            res.writeHead(500,{"Content-Type": "text/plain"})
-            res.end(err)
+      try {
+        const file = fs.readFileSync(fileName);
+        if (file) {
+          const url = await uploadToStorage(file, "video-master.mp4");
+          res.send(`uploaded here: ${url.publicURL}`);
         }
-      
+      } catch (err) {
+        res.writeHead(500, { "Content-Type": "text/plain" });
+        res.end(err);
+      }
   }
 });
 export default router;
