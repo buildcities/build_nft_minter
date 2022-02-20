@@ -22,10 +22,11 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ assets }: CellSuccessProps<AssetsQuery>) => {
+export const Success:React.FC<CellSuccessProps<AssetsQuery>> = ({ assets,children } ) => {
   return (
     <Flex  align="center"
     justify="center" gap={8}>
+      {children}
       {assets.map((item) => {
         return (
           <CardItem
@@ -35,6 +36,7 @@ export const Success = ({ assets }: CellSuccessProps<AssetsQuery>) => {
             src={item.source}
             isVideo={item.type=='video'}
             videoProps={item.type=='video'?{controls:true}:null}
+            externalUrl={item.source}
           />
         )
       })}

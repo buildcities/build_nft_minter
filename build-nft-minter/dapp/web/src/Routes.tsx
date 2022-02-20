@@ -13,10 +13,12 @@ import MainLayout from 'src/layouts/MainLayout/MainLayout'
 const Routes = () => {
   return (
     <Router>
+
+      <Route path="/re-auth" page={ReAuthPage} name="reAuth" />
+
       <Private unauthenticated='home' wrap={[MainLayout]}>
         <Route path="/assets" page={AssetsPage} name="assets" />
-        <Route path="/media" page={MediaPage} name="media" />
-        <Route path="/minter" page={MinterPage} name="minter" />
+        <Route path="/tokens" page={TokensPage} name="tokens" />
       </Private>
       <Route path="/" page={HomePage} name="home" />
 

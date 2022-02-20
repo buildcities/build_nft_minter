@@ -6,7 +6,8 @@ import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 import { init } from '../auth/moralis-client'
 import './index.css'
-const client =init(process.env.MORALIS_SERVER_URL, process.env.MORALIS_API_ID)
+import Web3Provider from './components/Web3Provider/Web3Provider'
+const client = init(process.env.MORALIS_SERVER_URL, process.env.MORALIS_API_ID)
 const App = () => {
 
 
@@ -15,12 +16,15 @@ const App = () => {
       <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
         {client && (
           <AuthProvider client={client} type="custom">
-            <ColorModeScript />
-            <ChakraProvider>
-              <RedwoodApolloProvider>
-                <Routes />
-              </RedwoodApolloProvider>
-            </ChakraProvider>
+            <Web3Provider>
+              <ColorModeScript />
+              <ChakraProvider>
+                <RedwoodApolloProvider>
+                  <Routes />
+                </RedwoodApolloProvider>
+              </ChakraProvider>
+            </Web3Provider>
+
           </AuthProvider>
         )}
       </RedwoodProvider>

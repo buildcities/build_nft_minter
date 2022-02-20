@@ -4,6 +4,7 @@ module.exports = (config, { mode }) => {
   if (mode === 'development') {
     // Add dev plugin
   }
+
   // See https://github.com/WalletConnect/walletconnect-monorepo/issues/584
   config.resolve.fallback = {
     os: require.resolve(`os-browserify/browser`),
@@ -22,7 +23,14 @@ module.exports = (config, { mode }) => {
     })
   )
   // Add custom rules for your project
-  // config.module.rules.push(YOUR_RULE)
+  // config.module.rules.push(config.module.rules.push({
+  //   test: /\.(js|mjs|jsx)$/,
+  //   enforce: 'pre',
+  //   loader: require.resolve('process/browser'),
+  //   resolve: {
+  //     fullySpecified: false,
+  //   },
+  // }))
 
   // Add custom plugins for your project
   // config.plugins.push(YOUR_PLUGIN)

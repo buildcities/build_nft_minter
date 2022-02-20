@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import MediaPage from './MediaPage'
+import SideDrawer from './SideDrawer'
 
 //   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+//    https://redwoodjs.com/docs/testing#testing-components
 
-describe('MediaPage', () => {
+describe('SideDrawer', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<MediaPage />)
+      render(<SideDrawer />)
     }).not.toThrow()
   })
 })

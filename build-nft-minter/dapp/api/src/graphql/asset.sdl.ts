@@ -17,6 +17,7 @@ export const schema = gql`
     genesis
   }
 
+
   type Query {
     assets(type:TYPE!): [Asset!] @skipAuth
   }
@@ -25,5 +26,5 @@ export const schema = gql`
     createAsset(type:TYPE!,category:CATEGORY!):Asset! @skipAuth
   }
 
-  
+
 `

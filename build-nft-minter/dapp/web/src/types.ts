@@ -19,3 +19,14 @@ export type formInputs = {
   royaltiesAmount?: number
   mediaFormat?: 'video' | 'image'
 }
+
+export type assetFormInputs = {
+  type?: string
+  videoLength?: number
+  mediaFormat?: 'video' | 'image'
+}
+
+export type Web3ProviderContextType = {
+  chain?: string
+  account?: string
+}

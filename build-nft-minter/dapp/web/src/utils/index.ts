@@ -1,30 +1,81 @@
-import { omitBy, isEmpty, isNull } from 'lodash'
 import Moralis from 'moralis'
+//import { Cloudinary } from "@cloudinary/url-gen";
 import { formInputs } from 'src/types'
+import { omitBy, isNull } from 'lodash'
+import axios from 'axios'
+import { navigate, routes } from '@redwoodjs/router'
+// const cld = new Cloudinary({
+//   cloud: {
+//     cloudName: 'demo'
+//   }
+// });
 
-const prepareMedia = (format: 'video' | 'image', type: string) => {
-  const baseURL =
-    process.env.ASSET_STORE_BASE_URL + process.env.ASSET_STORE_BASE_PATH
-  return `${baseURL}${format}/${type}.${format == 'video' ? 'mp4' : 'gif'}`
+// const prepareMedia = (format: 'video' | 'image', type: string) => {
+//   const baseURL =
+//     process.env.ASSET_STORE_BASE_URL + process.env.ASSET_STORE_BASE_PATH
+//   return `${baseURL}${format}/${type}.${format == 'video' ? 'mp4' : 'png'}`
+// }
+
+// const IPFS_FILENAME = 'metadata.json'
+
+// const prepareMetaData = ({ name, type, mediaFormat }: formInputs) => {
+//   const media =
+//     mediaFormat == 'video'
+//       ? { animation_url: prepareMedia(mediaFormat, type) }
+//       : { image: prepareMedia(mediaFormat, type) }
+//   return {
+//     description: `${type} NFT token`,
+//     name,
+//     external_url: prepareMedia(mediaFormat, type),
+//     ...media,
+//   }
+// }
+
+// const saveToIPFS = async (payload: formInputs) => {
+//   const jsonFile = new Moralis.File(IPFS_FILENAME, {
+//     base64: btoa(JSON.stringify(prepareMetaData(payload))),
+//   })
+//   const result = await jsonFile.saveIPFS()
+//   return result
+// }
+
+const prepareMedia = async (format: 'video' | 'image', type: string) => {
+  return (await (
+    await axios(
+      `${process.env.FUNCTIONS_PATH}prepareMediaLink/${format}/${type}`
+    )
+  ).data.url) as { url: string }
+  // return format == 'video'
+  //   ? cloudinary.v2.video(`${type}.mp4`, {
+  //       fetch_format: 'auto',
+  //       quality: 'auto',
+  //     })
+  //   : cloudinary.v2.image(`${type}.jpg`, {
+  //       quality: 'auto',
+  //       fetch_format: 'auto',
+  //     })
+
+  // const baseURL =
+  //   process.env.ASSET_STORE_BASE_URL + process.env.ASSET_STORE_BASE_PATH
+  // return `${baseURL}${format}/${type}.${format == 'video' ? 'mp4' : 'png'}`
 }
 
 const IPFS_FILENAME = 'metadata.json'
 
-const prepareMetaData = ({ name, type, mediaFormat }: formInputs) => {
-  const media =
-    mediaFormat == 'video'
-      ? { animation_url: prepareMedia(mediaFormat, type) }
-      : { image: prepareMedia(mediaFormat, type) }
+const prepareMetaData = async ({ name, type, mediaFormat }: formInputs) => {
+  const url = await prepareMedia(mediaFormat, type)
+  const media = mediaFormat == 'video' ? { animation_url: url } : { image: url }
   return {
     description: `${type} NFT token`,
     name,
+    external_url: url,
     ...media,
   }
 }
 
 const saveToIPFS = async (payload: formInputs) => {
   const jsonFile = new Moralis.File(IPFS_FILENAME, {
-    base64: btoa(JSON.stringify(prepareMetaData(payload))),
+    base64: btoa(JSON.stringify(await prepareMetaData(payload))),
   })
   const result = await jsonFile.saveIPFS()
   return result
@@ -39,13 +90,16 @@ const prepareMintArgs = async (data: formInputs) => {
   const web3 = await getWeb3Client()
   const chain = web3.network.name
   const userAddress = await web3.getSigner().getAddress()
+  //const userAddress = owner
   const supply = qty * 1
-  const tokenUri = await (await saveToIPFS(data))._url
+  const fileItem = (await await saveToIPFS(data)) as unknown as {
+    _ipfs: string
+  }
   const options = {
     chain,
     userAddress,
     tokenType,
-    tokenUri,
+    tokenUri: fileItem._ipfs,
     supply,
     royaltiesAmount: royaltiesAmount ? royaltiesAmount * 100 : null,
     list,
@@ -56,32 +110,18 @@ const prepareMintArgs = async (data: formInputs) => {
   return omitBy(options, isNull)
 }
 
+export const mintNFT = async (data: formInputs) => {
+  const options = await prepareMintArgs(data)
+  return options
+  //return await Moralis.Plugins.rarible.lazyMint(options)
+}
+
 export const getWeb3Client = async () => {
   const isWeb3Enabled = await Moralis.isWeb3Enabled()
   if (!isWeb3Enabled) {
-    await Moralis.enableWeb3()
+    //redirect to reauth Page
+    navigate(routes.reAuth())
+    //await Moralis.enableWeb3()
   }
   return Moralis.web3
 }
-
-export const mintNFT = async (data: formInputs) => {
-  const options = await prepareMintArgs(data)
-  //return options
-  return await Moralis.Plugins.rarible.lazyMint(options)
-}
-
-/* const mintOnRarible = async (nftUrl: string, data: formInputs) => {
-  const web3 = await Moralis.web3
-  return await Moralis.Plugins.rarible.lazyMint({
-    chain: 'rinkeby',
-    userAddress: '0x7f64041298CC2C045FE5eb0e897ab7b5D4BdB4F3',
-    tokenType: 'ERC1155',
-    tokenUri: '/ipfs/QmWLsBu6nS4ovaHbGAXprD1qEssJu4r5taQfB74sCG51tp',
-    supply: 100,
-    royaltiesAmount: 5, // 0.05% royalty. Optional
-    list: true, // Only if lazy listing
-    listTokenAmount: 3, // Only if lazy listing
-    listTokenValue: 10 ** 18, // Only if lazy listing
-    listAssetClass: 'ETH', // only if lazy listing  || optional
-  })
-} */

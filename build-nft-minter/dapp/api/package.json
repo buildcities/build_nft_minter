@@ -6,6 +6,8 @@
     "@redwoodjs/api": "v0.44.1",
     "@redwoodjs/graphql-server": "v0.44.1",
     "@supabase/supabase-js": "^1.30.0",
+    "axios": "^0.26.0",
+    "cloudinary": "^1.28.1",
     "moralis": "^1.3.1"
   }
 }

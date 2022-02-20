@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import MinterPage from './MinterPage'
+import CardItemButton from './CardItemButton'
 
 //   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+//    https://redwoodjs.com/docs/testing#testing-components
 
-describe('MinterPage', () => {
+describe('CardItemButton', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<MinterPage />)
+      render(<CardItemButton />)
     }).not.toThrow()
   })
 })

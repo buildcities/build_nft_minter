@@ -9,7 +9,7 @@ const AuthButton = () => {
      await logIn({ signingMessage: WELCOME_TEXT })
   }
   return isAuthenticated ? (
-    <Redirect to={routes.minter()} />
+    <Redirect to={routes.tokens()} />
   ) : (
     <Button
       isLoading={loading}
