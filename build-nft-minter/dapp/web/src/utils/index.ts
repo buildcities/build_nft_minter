@@ -96,11 +96,11 @@ const prepareMintArgs = async (data: formInputs) => {
 }
 
 export const mintNFT = async (data: formInputs) => {
-  const result = await prepareMedia(data.mediaFormat, data.type)
-  return result
-  //const options = await prepareMintArgs(data)
+  //const result = await prepareMedia(data.mediaFormat, data.type)
+  //return result
+  const options = await prepareMintArgs(data)
   //return options
-  //return await Moralis.Plugins.rarible.lazyMint(options)
+  return await Moralis.Plugins.rarible.lazyMint(options)
 }
 
 export const getWeb3Client = () => {
