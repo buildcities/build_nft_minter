@@ -8,6 +8,7 @@ const logOutUnsubscribe = Moralis.onWeb3Deactivated(() => {
   navigate(routes.reAuth())
 })
 const deactivateUnsubscribe = Moralis.onChainChanged((result) => {
+  console.log(Moralis.web3.network.name)
   useStore.getState().setChain(getActiveChain(result))
 })
 const activateUnsubscribe = Moralis.onAccountChanged((result) => {

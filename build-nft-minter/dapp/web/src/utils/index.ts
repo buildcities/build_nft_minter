@@ -12,6 +12,15 @@ const prepareMedia = async (format: 'video' | 'image', type: string) => {
   ).data.url) as { url: string }
 }
 
+const normalizeChain = (network: string) => {
+  switch (network) {
+    case 'homestead':
+      return 'eth'
+    default:
+      return network
+  }
+}
+
 const IPFS_FILENAME = 'metadata.json'
 
 const prepareMetaData = async ({
@@ -45,7 +54,7 @@ const prepareMintArgs = async (data: formInputs) => {
   const listAssetClass = price ? 'ETH' : null
   const listTokenAmount = price ? +qty : null
   const web3 = getWeb3Client()
-  const chain = Moralis.network
+  const chain = normalizeChain(web3.network.name)
   const userAddress = await web3.getSigner().getAddress()
   //const userAddress = owner
   const supply = qty * 1
