@@ -14,14 +14,14 @@ const App = () => {
       <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
         {client && (
           <AuthProvider client={client} type="custom">
-            <ColorModeScript />
-            <ChakraProvider>
-              <RedwoodApolloProvider>
-                <Web3Provider>
+            <Web3Provider>
+              <ColorModeScript />
+              <ChakraProvider>
+                <RedwoodApolloProvider>
                   <Routes />
-                </Web3Provider>
-              </RedwoodApolloProvider>
-            </ChakraProvider>
+                </RedwoodApolloProvider>
+              </ChakraProvider>
+            </Web3Provider>
           </AuthProvider>
         )}
       </RedwoodProvider>

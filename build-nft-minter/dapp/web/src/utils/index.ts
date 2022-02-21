@@ -1,4 +1,4 @@
-import Moralis from 'moralis'
+import { Moralis } from 'moralis'
 //import { Cloudinary } from "@cloudinary/url-gen";
 import { formInputs } from 'src/types'
 import { omitBy, isNull } from 'lodash'
@@ -118,12 +118,11 @@ export const mintNFT = async (data: formInputs) => {
   return await Moralis.Plugins.rarible.lazyMint(options)
 }
 
-export const getWeb3Client = () => {
-  const isWeb3Enabled = Moralis.isWeb3Enabled()
+export const getWeb3Client =  () => {
+  const isWeb3Enabled =  Moralis.isWeb3Enabled()
+  console.log(isWeb3Enabled)
   if (!isWeb3Enabled) {
-    //redirect to reauth Page
     navigate(routes.reAuth())
-    //await Moralis.enableWeb3()
   }
   return Moralis.web3
 }
