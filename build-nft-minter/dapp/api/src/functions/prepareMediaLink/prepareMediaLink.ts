@@ -18,9 +18,7 @@ import * as cloudinary from 'cloudinary'
  * function, and execution environment.
  */
 export const handler = async (event: APIGatewayEvent) => {
-  const params = event.path.split('/')
-  const format = params[2]
-  const type = params[3]
+  const { format, type } = event.queryStringParameters
   const url =
     format == 'video'
       ? cloudinary.v2.url(`nft/${type}.mp4`, {

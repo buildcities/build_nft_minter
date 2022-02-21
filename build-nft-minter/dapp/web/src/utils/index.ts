@@ -42,8 +42,7 @@ import { navigate, routes } from '@redwoodjs/router'
 const prepareMedia = async (format: 'video' | 'image', type: string) => {
   return (await (
     await axios(
-      `${process.env.FUNCTIONS_PATH}prepareMediaLink/${format}/${type}`
-      //`http://localhost//prepareMediaLink/${format}/${type}`
+      `${process.env.FUNCTIONS_PATH}prepareMediaLink?format=${format}&type=${type}`
     )
   ).data.url) as { url: string }
 }
@@ -99,11 +98,11 @@ const prepareMintArgs = async (data: formInputs) => {
 }
 
 export const mintNFT = async (data: formInputs) => {
-  const result = await prepareMedia(data.mediaFormat, data.type)
-  return result
-  //const options = await prepareMintArgs(data)
+  // const result = await prepareMedia(data.mediaFormat, data.type)
+  // return result
+  const options = await prepareMintArgs(data)
   //return options
-  //return await Moralis.Plugins.rarible.lazyMint(options)
+  return await Moralis.Plugins.rarible.lazyMint(options)
 }
 
 export const getWeb3Client = () => {

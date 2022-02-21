@@ -29,8 +29,11 @@ const TokensPage = () => {
       })
       .then(() => {
         onClose()
-      }).catch(e=>e)
-
+      })
+      .catch((e) => e)
+      .finally(() => {
+        setBusy(false)
+      })
   }
   return (
     <Box py={[2, 5]}>
