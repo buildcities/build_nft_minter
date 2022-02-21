@@ -6,7 +6,7 @@ import SideDrawer from 'src/components/SideDrawer/SideDrawer'
 import TokenList from 'src/components/TokensCell'
 import { formInputs } from 'src/types'
 import { mintNFT } from 'src/utils'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useApolloClient } from '@apollo/client'
 import { useStore } from 'src/utils/stores/ui'
 

@@ -12,6 +12,7 @@ export interface NavProps {
 export type formInputs = {
   qty?: number
   name?: string
+  description?: string
   type?: string
   tokenType?: string
   showPrice?: boolean

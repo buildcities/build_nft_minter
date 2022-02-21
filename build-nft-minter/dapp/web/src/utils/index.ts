@@ -1,43 +1,8 @@
 import { Moralis } from 'moralis'
-//import { Cloudinary } from "@cloudinary/url-gen";
 import { formInputs } from 'src/types'
 import { omitBy, isNull } from 'lodash'
 import axios from 'axios'
 import { navigate, routes } from '@redwoodjs/router'
-// const cld = new Cloudinary({
-//   cloud: {
-//     cloudName: 'demo'
-//   }
-// });
-
-// const prepareMedia = (format: 'video' | 'image', type: string) => {
-//   const baseURL =
-//     process.env.ASSET_STORE_BASE_URL + process.env.ASSET_STORE_BASE_PATH
-//   return `${baseURL}${format}/${type}.${format == 'video' ? 'mp4' : 'png'}`
-// }
-
-// const IPFS_FILENAME = 'metadata.json'
-
-// const prepareMetaData = ({ name, type, mediaFormat }: formInputs) => {
-//   const media =
-//     mediaFormat == 'video'
-//       ? { animation_url: prepareMedia(mediaFormat, type) }
-//       : { image: prepareMedia(mediaFormat, type) }
-//   return {
-//     description: `${type} NFT token`,
-//     name,
-//     external_url: prepareMedia(mediaFormat, type),
-//     ...media,
-//   }
-// }
-
-// const saveToIPFS = async (payload: formInputs) => {
-//   const jsonFile = new Moralis.File(IPFS_FILENAME, {
-//     base64: btoa(JSON.stringify(prepareMetaData(payload))),
-//   })
-//   const result = await jsonFile.saveIPFS()
-//   return result
-// }
 
 const prepareMedia = async (format: 'video' | 'image', type: string) => {
   return (await (
@@ -49,11 +14,16 @@ const prepareMedia = async (format: 'video' | 'image', type: string) => {
 
 const IPFS_FILENAME = 'metadata.json'
 
-const prepareMetaData = async ({ name, type, mediaFormat }: formInputs) => {
+const prepareMetaData = async ({
+  name,
+  type,
+  description,
+  mediaFormat,
+}: formInputs) => {
   const url = await prepareMedia(mediaFormat, type)
   const media = mediaFormat == 'video' ? { animation_url: url } : { image: url }
   return {
-    description: `${type} NFT token`,
+    description,
     name,
     external_url: url,
     ...media,

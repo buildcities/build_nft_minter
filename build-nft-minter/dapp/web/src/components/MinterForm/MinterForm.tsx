@@ -9,6 +9,7 @@ import React, { useState } from 'react'
 import FormControl from 'src/components/FormControl/FormControl'
 import TextField from 'src/components/TextInputField/TextInputField'
 import SelectField from 'src/components/SelectInputField/SelectInputField'
+import TextAreaField from 'src/components/TextAreaField/TextAreaField'
 import { Form } from '@redwoodjs/forms'
 import SubmitFormButton from '../SubmitFormButton/SubmitFormButton'
 
@@ -36,6 +37,15 @@ const MinterForm: React.FC<{
               <TextField
                 validation={{ required: true }}
                 placeholder="e.g build_ founders passport batch -1"
+                {...props}
+              />
+            )}
+          </FormControl>
+          <FormControl label="NFT description" name="description">
+            {(props) => (
+              <TextAreaField
+                validation={{ required: true }}
+                placeholder="Enter your awesome description"
                 {...props}
               />
             )}
