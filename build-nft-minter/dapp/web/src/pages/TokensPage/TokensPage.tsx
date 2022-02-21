@@ -5,39 +5,32 @@ import CardItemButton from 'src/components/CardItemButton/CardItemButton'
 import SideDrawer from 'src/components/SideDrawer/SideDrawer'
 import TokenList from 'src/components/TokensCell'
 import { formInputs } from 'src/types'
-import { getWeb3Client, mintNFT } from 'src/utils'
-import { useContext, useEffect, useState } from 'react'
-import { Web3ProviderContext } from 'src/components/Web3Provider/Web3Provider'
+import { mintNFT } from 'src/utils'
+import { useContext, useState } from 'react'
 import { useApolloClient } from '@apollo/client'
-import Moralis from 'moralis/types'
+import { useStore } from 'src/utils/stores/ui'
 
 const HEADER = 'Mint a token'
 
 const TokensPage = () => {
   const { onOpen, onClose, ...props } = useDisclosure()
   const [busy, setBusy] = useState(false)
-  const { chain, account } = useContext(Web3ProviderContext)
+  const { chain, account } = useStore((s) => s)
   const client = useApolloClient()
-  const [walletActive, setwalletActive] = useState(false)
-
-  useEffect(() => {
-    const web3 = getWeb3Client()
-    if (web3) {
-      setwalletActive(true)
-    }
-  })
+  //const [walletActive, setwalletActive] = useState(false)
 
   const onSubmit = async (payload: formInputs) => {
     setBusy(true)
-    await mintNFT(payload)
+    const result = await mintNFT(payload)
+    console.log(result)
     client
       .refetchQueries({
         include: 'active',
       })
       .then(() => {
-        setBusy(false)
         onClose()
-      })
+      }).catch(e=>e)
+
   }
   return (
     <Box py={[2, 5]}>
@@ -45,11 +38,11 @@ const TokensPage = () => {
       <Heading pl={10} pb={5}>
         Tokens
       </Heading>
-      {walletActive && (
-        <TokenList onOpen={onOpen} owner={account} chain={chain}>
-          <CardItemButton onClick={onOpen} subTitle="Mint" title="New Token" />
-        </TokenList>
-      )}
+
+      <TokenList onOpen={onOpen} owner={account} chain={chain}>
+        <CardItemButton onClick={onOpen} subTitle="Mint" title="New Token" />
+      </TokenList>
+
       <SideDrawer header={HEADER} onClose={onClose} {...props}>
         <MinterForm isBusy={busy} onSubmit={onSubmit} />
       </SideDrawer>

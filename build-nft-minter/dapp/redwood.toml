@@ -6,7 +6,7 @@
 # https://redwoodjs.com/docs/app-configuration-redwood-toml
 
 [web]
-  title = "build_ minter"
+  title = "Minty"
   port = 8910
   apiUrl = "/api"
   includeEnvironmentVariables = ['MORALIS_SERVER_URL','MORALIS_API_ID'

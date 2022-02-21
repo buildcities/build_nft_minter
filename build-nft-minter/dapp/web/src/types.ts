@@ -29,5 +29,4 @@ export type assetFormInputs = {
 export type Web3ProviderContextType = {
   chain?: string
   account?: string
-  walletActive?: boolean
 }

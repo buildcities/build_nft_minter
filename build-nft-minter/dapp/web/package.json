@@ -25,6 +25,8 @@
     "cloudinary": "^1.28.1",
     "crypto-browserify": "^3.12.0",
     "https-browserify": "^1.0.0",
+    "immer": "^9.0.12",
+    "localstorage-slim": "^2.2.0",
     "lodash": "^4.17.21",
     "magic-sdk": "^8.0.1",
     "moralis": "^1.3.2",
@@ -38,7 +40,8 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "url": "^0.11.0",
-    "util": "^0.12.4"
+    "util": "^0.12.4",
+    "zustand": "^3.7.0"
   },
   "devDependencies": {
     "@chakra-ui/react": "^1.8.3",

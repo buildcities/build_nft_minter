@@ -41,23 +41,8 @@ import { navigate, routes } from '@redwoodjs/router'
 
 const prepareMedia = async (format: 'video' | 'image', type: string) => {
   return (await (
-    await axios(
-      `${process.env.FUNCTIONS_PATH}prepareMediaLink/${format}/${type}`
-    )
+    await axios(`/api/prepareMediaLink/${format}/${type}`)
   ).data.url) as { url: string }
-  // return format == 'video'
-  //   ? cloudinary.v2.video(`${type}.mp4`, {
-  //       fetch_format: 'auto',
-  //       quality: 'auto',
-  //     })
-  //   : cloudinary.v2.image(`${type}.jpg`, {
-  //       quality: 'auto',
-  //       fetch_format: 'auto',
-  //     })
-
-  // const baseURL =
-  //   process.env.ASSET_STORE_BASE_URL + process.env.ASSET_STORE_BASE_PATH
-  // return `${baseURL}${format}/${type}.${format == 'video' ? 'mp4' : 'png'}`
 }
 
 const IPFS_FILENAME = 'metadata.json'
@@ -111,18 +96,29 @@ const prepareMintArgs = async (data: formInputs) => {
 }
 
 export const mintNFT = async (data: formInputs) => {
-  //const result =await prepareMedia(data.mediaFormat, data.type)
-  //return result
-  const options = await prepareMintArgs(data)
+  const result = await prepareMedia(data.mediaFormat, data.type)
+  return result
+  //const options = await prepareMintArgs(data)
   //return options
-  return await Moralis.Plugins.rarible.lazyMint(options)
+  //return await Moralis.Plugins.rarible.lazyMint(options)
 }
 
-export const getWeb3Client =  () => {
-  const isWeb3Enabled =  Moralis.isWeb3Enabled()
-  console.log(isWeb3Enabled)
+export const getWeb3Client = () => {
+  const isWeb3Enabled = Moralis.isWeb3Enabled()
+  //console.log(isWeb3Enabled)
   if (!isWeb3Enabled) {
     navigate(routes.reAuth())
   }
   return Moralis.web3
+}
+
+export const getActiveChain = (chainId: string) => {
+  switch (chainId) {
+    case '0x1':
+      return 'homestead'
+    case '0x4':
+      return 'rinkeby'
+    default:
+      window.alert('Supported chains are rinkeby and mainnet!')
+  }
 }
