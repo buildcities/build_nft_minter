@@ -1,8 +1,5 @@
 import { fetchOwnedTokens } from 'src/lib/utils'
 
-const BUCKET_NAME = 'nft'
-const EMPTY = '.emptyFolderPlaceholder'
-
 export const tokens = async ({ owner, chain }) => {
   return await fetchOwnedTokens(owner, chain)
 }

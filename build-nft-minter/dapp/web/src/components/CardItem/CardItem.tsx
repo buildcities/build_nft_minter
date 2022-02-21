@@ -47,7 +47,7 @@ const ImageViewer = ({ src }: { src: string }) => {
     //     },
     //   }}
     // >
-    <Box w='full'>
+    <Box w="full">
       <Image
         rounded={'lg'}
         height={'230px'}
@@ -68,7 +68,7 @@ export default function CardItem({
   isVideo,
   videoProps,
   src,
-  externalUrl
+  externalUrl,
 }: CardItemProps) {
   return (
     <LinkBox>
@@ -81,12 +81,11 @@ export default function CardItem({
           bg={useColorModeValue('white', 'gray.800')}
           boxShadow={'2xl'}
           rounded={'lg'}
-        // pos={'relative'}
-        // zIndex={1}
+          // pos={'relative'}
+          // zIndex={1}
         >
           <LinkOverlay isExternal href={externalUrl}>
             {isVideo ? (
-
               <Video
                 url={src}
                 height={230}
@@ -94,16 +93,20 @@ export default function CardItem({
                 src={src}
                 {...videoProps}
               />
-
-
             ) : (
-              src &&
-              <ImageViewer src={src} />
+              src && <ImageViewer src={src} />
             )}
           </LinkOverlay>
           {children}
-          <Stack pt={10} justify='center' w='full' align={'center'}>
-            <Text color={'gray.500'} maxW={200} isTruncated textAlign='center' fontSize={'sm'} textTransform={'uppercase'}>
+          <Stack pt={10} justify="center" w="full" align={'center'}>
+            <Text
+              color={'gray.500'}
+              maxW={200}
+              isTruncated
+              textAlign="center"
+              fontSize={'sm'}
+              textTransform={'uppercase'}
+            >
               {subTitle}
             </Text>
             <Heading fontSize={'xl'} fontFamily={'body'} fontWeight={500}>

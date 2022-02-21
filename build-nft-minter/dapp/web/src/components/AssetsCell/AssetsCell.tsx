@@ -1,7 +1,8 @@
 import type { AssetsQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import CardItem from '../CardItem/CardItem'
-import { Flex } from '@chakra-ui/react'
+import { Box, Center, Flex, Spinner, Text } from '@chakra-ui/react'
+import CardItemButton from '../CardItemButton/CardItemButton'
 
 export const QUERY = gql`
   query AssetsQuery($type: TYPE!) {
@@ -14,18 +15,36 @@ export const QUERY = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
-
-export const Empty = () => <div>Empty</div>
-
-export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+export const Loading = () => (
+  <Box>
+    <Center>
+      <Spinner size={'xl'} />
+    </Center>
+  </Box>
 )
 
-export const Success:React.FC<CellSuccessProps<AssetsQuery>> = ({ assets,children } ) => {
+export const Empty: React.FC<{ onOpen: () => void }> = ({ onOpen }) => (
+  <Box>
+    <Center>
+      <CardItemButton onClick={onOpen} subTitle="Add" title="New Asset" />
+    </Center>
+  </Box>
+)
+
+export const Failure = ({ error }: CellFailureProps) => (
+  <Box>
+    <Center>
+      <Text color={'red.400'}>Error: {error.message}</Text>
+    </Center>
+  </Box>
+)
+
+export const Success: React.FC<CellSuccessProps<AssetsQuery>> = ({
+  assets,
+  children,
+}) => {
   return (
-    <Flex  align="center"
-    justify="center" gap={8}>
+    <Flex align="center" justify="center" gap={8}>
       {children}
       {assets.map((item) => {
         return (
@@ -34,8 +53,8 @@ export const Success:React.FC<CellSuccessProps<AssetsQuery>> = ({ assets,childre
             title={item.category}
             key={item.id}
             src={item.source}
-            isVideo={item.type=='video'}
-            videoProps={item.type=='video'?{controls:true}:null}
+            isVideo={item.type == 'video'}
+            videoProps={item.type == 'video' ? { controls: true } : null}
             externalUrl={item.source}
           />
         )

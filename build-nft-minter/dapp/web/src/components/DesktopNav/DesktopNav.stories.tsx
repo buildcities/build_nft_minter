@@ -5,4 +5,3 @@ export const generated = () => {
 }
 
 export default { title: 'Components/DesktopNav' }
-

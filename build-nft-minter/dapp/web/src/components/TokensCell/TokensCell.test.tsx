@@ -1,4 +1,4 @@
-import { render, screen } from '@redwoodjs/testing/web'
+import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './TokensCell'
 import { standard } from './TokensCell.mock'
 
@@ -17,7 +17,13 @@ describe('TokensCell', () => {
 
   it('renders Empty successfully', async () => {
     expect(() => {
-      render(<Empty />)
+      render(
+        <Empty
+          onOpen={function (): void {
+            throw new Error('Function not implemented.')
+          }}
+        />
+      )
     }).not.toThrow()
   })
 

@@ -1,5 +1,4 @@
-import type { APIGatewayEvent, Context } from 'aws-lambda'
-import { logger } from 'src/lib/logger'
+import type { APIGatewayEvent } from 'aws-lambda'
 import * as cloudinary from 'cloudinary'
 
 /**
@@ -18,17 +17,17 @@ import * as cloudinary from 'cloudinary'
  * @param { Context } context - contains information about the invocation,
  * function, and execution environment.
  */
-export const handler = async (event: APIGatewayEvent, context: Context) => {
+export const handler = async (event: APIGatewayEvent) => {
   const params = event.path.split('/')
   const format = params[2]
   const type = params[3]
   const url =
     format == 'video'
-      ? cloudinary.v2.url(`nft/${type}`, {
+      ? cloudinary.v2.url(`nft/${type}.mp4`, {
           resource_type: 'video',
           loop: true,
         })
-      : cloudinary.v2.url(`nft/${type}`, {
+      : cloudinary.v2.url(`nft/${type}.jpg`, {
           quality: 'auto',
           fetch_format: 'auto',
         })

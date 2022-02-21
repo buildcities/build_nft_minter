@@ -10,9 +10,9 @@ const LogoutButton = () => {
       fontWeight={600}
       color={'white'}
       rounded="full"
-      bg={'pink.400'}
+      bg={'red.400'}
       _hover={{
-        bg: 'pink.300',
+        bg: 'reed.300',
       }}
       onClick={logOut}
     >

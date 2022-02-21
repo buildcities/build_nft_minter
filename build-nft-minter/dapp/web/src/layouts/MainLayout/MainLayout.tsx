@@ -1,4 +1,4 @@
-import { Box, useDisclosure } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import Header from 'src/components/Header/Header'
 
 type MainLayoutProps = {

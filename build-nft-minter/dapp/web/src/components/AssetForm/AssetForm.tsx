@@ -1,14 +1,9 @@
-import {
-  Button,
-  Box,
-  Collapse,
-  useColorModeValue,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Collapse, useColorModeValue, VStack } from '@chakra-ui/react'
 
 import { Form, useWatch, useForm } from '@redwoodjs/forms'
 import FormControl from 'src/components/FormControl/FormControl'
 import SelectField from 'src/components/SelectInputField/SelectInputField'
+import SubmitFormButton from '../SubmitFormButton/SubmitFormButton'
 
 type AssetFormType = {
   onSubmit?: (payload: AssetFormType) => void
@@ -16,12 +11,13 @@ type AssetFormType = {
 
 export default function AssetForm({ onSubmit }: AssetFormType) {
   const formMethods = useForm()
-  const formatType = useWatch({ name: 'mediaFormat', control: formMethods.control, defaultValue: 'video' })
-
+  const formatType = useWatch({
+    name: 'mediaFormat',
+    control: formMethods.control,
+    defaultValue: 'video',
+  })
 
   return (
-
-
     <Box
       bg={useColorModeValue('white', 'gray.700')}
       borderRadius="lg"
@@ -32,7 +28,6 @@ export default function AssetForm({ onSubmit }: AssetFormType) {
     >
       <Form formMethods={formMethods} onSubmit={onSubmit}>
         <VStack spacing={5}>
-
           <FormControl label="Type" name="type">
             {(props) => (
               <SelectField
@@ -56,7 +51,11 @@ export default function AssetForm({ onSubmit }: AssetFormType) {
           </FormControl>
           <Box width={'full'}>
             <Collapse in={formatType == 'video'} animateOpacity>
-              <FormControl width={'full'} label="Video length" name="videoLength">
+              <FormControl
+                width={'full'}
+                label="Video length"
+                name="videoLength"
+              >
                 {(props) => (
                   <SelectField validation={{ required: true }} {...props}>
                     <option value="5">5 minute video</option>
@@ -69,21 +68,9 @@ export default function AssetForm({ onSubmit }: AssetFormType) {
               </FormControl>
             </Collapse>
           </Box>
-          <Button
-            colorScheme="blue"
-            bg="blue.400"
-            color="white"
-            _hover={{
-              bg: 'blue.500',
-            }}
-            isFullWidth
-            type="submit"
-          >
-            Generate
-          </Button>
+          <SubmitFormButton>Generate</SubmitFormButton>
         </VStack>
       </Form>
     </Box>
-
   )
 }

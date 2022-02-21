@@ -76,4 +76,3 @@ const fetchTokenMetadata = async (id: string, chain: string) => {
   }
   return data
 }
-

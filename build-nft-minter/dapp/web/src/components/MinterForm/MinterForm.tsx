@@ -1,10 +1,6 @@
 import {
   Box,
-  Button,
   Collapse,
-  Flex,
-  Heading,
-  Stack,
   Switch,
   useColorModeValue,
   VStack,
@@ -14,16 +10,17 @@ import FormControl from 'src/components/FormControl/FormControl'
 import TextField from 'src/components/TextInputField/TextInputField'
 import SelectField from 'src/components/SelectInputField/SelectInputField'
 import { Form } from '@redwoodjs/forms'
+import SubmitFormButton from '../SubmitFormButton/SubmitFormButton'
 
 const MinterForm: React.FC<{
-  onSubmit?: (payload: Record<string, unknown>) => void, isBusy?: boolean
+  onSubmit?: (payload: Record<string, unknown>) => void
+  isBusy?: boolean
 }> = ({ onSubmit, isBusy }) => {
   const [showPrice, setShowPrice] = useState(false)
-  const onChange = (payload) => {
+  const onChange = () => {
     setShowPrice((state) => !state)
   }
   return (
-
     <Box
       bg={useColorModeValue('white', 'gray.700')}
       borderRadius="lg"
@@ -82,11 +79,7 @@ const MinterForm: React.FC<{
               />
             )}
           </FormControl>
-          <FormControl
-            width={'full'}
-            label="Royalty"
-            name="royaltiesAmount"
-          >
+          <FormControl width={'full'} label="Royalty" name="royaltiesAmount">
             {(props) => (
               <TextField
                 validation={{ required: false }}
@@ -96,12 +89,8 @@ const MinterForm: React.FC<{
             )}
           </FormControl>
           <FormControl label="List for sale" name="forSale">
-            {(props) => (
-              <Switch
-                isChecked={showPrice}
-                onChange={onChange}
-                size="lg"
-              />
+            {() => (
+              <Switch isChecked={showPrice} onChange={onChange} size="lg" />
             )}
           </FormControl>
           <Box width={'full'}>
@@ -117,23 +106,10 @@ const MinterForm: React.FC<{
               </FormControl>
             </Collapse>
           </Box>
-          <Button
-            isLoading={isBusy}
-            colorScheme="blue"
-            bg="blue.400"
-            color="white"
-            _hover={{
-              bg: 'blue.500',
-            }}
-            isFullWidth
-            type="submit"
-          >
-            Mint
-          </Button>
+          <SubmitFormButton isBusy={isBusy}>Mint</SubmitFormButton>
         </VStack>
       </Form>
     </Box>
-
   )
 }
 export default MinterForm

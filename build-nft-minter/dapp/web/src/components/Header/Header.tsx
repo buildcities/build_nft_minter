@@ -1,14 +1,13 @@
 import {
   Box,
   Flex,
-  Text,
   IconButton,
-  Button,
   Stack,
   Collapse,
   useColorModeValue,
   useBreakpointValue,
   useDisclosure,
+  Heading,
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 import DesktopNav from 'src/components/DesktopNav/DesktopNav'
@@ -46,13 +45,15 @@ const Header = () => {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Text
+          <Heading
             textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
             fontFamily={'heading'}
-            color={useColorModeValue('gray.800', 'white')}
+            fontWeight="bold"
+            size={'md'}
+            color={useColorModeValue('green.400', 'green.400')}
           >
-            Logo
-          </Text>
+            Minty
+          </Heading>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
             <DesktopNav navItems={NAV_ITEMS()} />
@@ -65,8 +66,7 @@ const Header = () => {
           direction={'row'}
           spacing={6}
         >
-         <LogoutButton/>
-          
+          <LogoutButton />
         </Stack>
       </Flex>
 

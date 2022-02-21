@@ -1,6 +1,6 @@
-import CardItem, { CardItemProps } from "../CardItem/CardItem"
+import CardItem, { CardItemProps } from '../CardItem/CardItem'
 import { AddIcon } from '@chakra-ui/icons'
-import { Button, Center, LinkBox, LinkOverlay } from "@chakra-ui/react"
+import { Center, LinkOverlay } from '@chakra-ui/react'
 
 interface CardItemButtonProps extends CardItemProps {
   onClick?: () => void
@@ -8,14 +8,13 @@ interface CardItemButtonProps extends CardItemProps {
 
 const CardItemButton = ({ onClick, ...props }: CardItemButtonProps) => {
   return (
-
-    <CardItem {...props} >
+    <CardItem {...props}>
       <Center height={230} w={282}>
-        <LinkOverlay href='#' onClickCapture={onClick}><AddIcon fontSize={32} /></LinkOverlay>
+        <LinkOverlay href="#" onClickCapture={onClick}>
+          <AddIcon fontSize={32} />
+        </LinkOverlay>
       </Center>
     </CardItem>
-
-
   )
 }
 

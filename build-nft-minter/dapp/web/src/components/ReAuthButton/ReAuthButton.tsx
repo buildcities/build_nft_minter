@@ -1,12 +1,11 @@
-import { Button } from "@chakra-ui/react"
-import { back } from "@redwoodjs/router"
-import { Moralis } from "moralis"
-import { useState } from "react"
+import { Button } from '@chakra-ui/react'
+import { back } from '@redwoodjs/router'
+import { Moralis } from 'moralis'
+import { useState } from 'react'
 
 const ReAuthButton = () => {
   const [busy, setBusy] = useState(false)
   const handleReAuth = async () => {
-
     setBusy(true)
     await Moralis.enableWeb3()
     const isWeb3Enabled = await Moralis.isWeb3Enabled()

@@ -1,23 +1,16 @@
-import { createClient } from '@supabase/supabase-js'
 import cloudinary from 'cloudinary'
 //import {promisify} from 'util'
 //onst ResourcesByTag = promisify(cloudinary.v2.api.resources_by_tag)
 
-const storage = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_KEY
-).storage
-
-const BUCKET_NAME = 'nft'
-const EMPTY = '.emptyFolderPlaceholder'
+// const storage = createClient(
+//   process.env.SUPABASE_URL,
+//   process.env.SUPABASE_KEY
+// ).storage
 
 const prepareCategoryName = (path: string, toBeRemoved: string) =>
   path.replace(toBeRemoved, '')
 
-
-
 export const assets = async ({ type }) => {
-  const folderPath = `${type}`
   return await new Promise((resolve, reject) => {
     cloudinary.v2.api.resources_by_tag(
       'build_',
@@ -28,7 +21,7 @@ export const assets = async ({ type }) => {
           const result = res?.resources.map((item) => ({
             id: item.asset_id,
             type,
-            category: prepareCategoryName(item.public_id,'nft/'),
+            category: prepareCategoryName(item.public_id, 'nft/'),
             source: item.secure_url,
           }))
           resolve(result)

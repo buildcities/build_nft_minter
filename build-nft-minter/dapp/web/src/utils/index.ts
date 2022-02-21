@@ -87,7 +87,7 @@ const prepareMintArgs = async (data: formInputs) => {
   const list = price ? true : null
   const listAssetClass = price ? 'ETH' : null
   const listTokenAmount = price ? +qty : null
-  const web3 = await getWeb3Client()
+  const web3 = getWeb3Client()
   const chain = web3.network.name
   const userAddress = await web3.getSigner().getAddress()
   //const userAddress = owner
@@ -111,13 +111,15 @@ const prepareMintArgs = async (data: formInputs) => {
 }
 
 export const mintNFT = async (data: formInputs) => {
+  //const result =await prepareMedia(data.mediaFormat, data.type)
+  //return result
   const options = await prepareMintArgs(data)
-  return options
-  //return await Moralis.Plugins.rarible.lazyMint(options)
+  //return options
+  return await Moralis.Plugins.rarible.lazyMint(options)
 }
 
-export const getWeb3Client = async () => {
-  const isWeb3Enabled = await Moralis.isWeb3Enabled()
+export const getWeb3Client = () => {
+  const isWeb3Enabled = Moralis.isWeb3Enabled()
   if (!isWeb3Enabled) {
     //redirect to reauth Page
     navigate(routes.reAuth())

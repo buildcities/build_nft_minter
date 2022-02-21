@@ -9,22 +9,19 @@ import './index.css'
 import Web3Provider from './components/Web3Provider/Web3Provider'
 const client = init(process.env.MORALIS_SERVER_URL, process.env.MORALIS_API_ID)
 const App = () => {
-
-
   return (
     <FatalErrorBoundary page={FatalErrorPage}>
       <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
         {client && (
           <AuthProvider client={client} type="custom">
-            <Web3Provider>
-              <ColorModeScript />
-              <ChakraProvider>
-                <RedwoodApolloProvider>
+            <ColorModeScript />
+            <ChakraProvider>
+              <RedwoodApolloProvider>
+                <Web3Provider>
                   <Routes />
-                </RedwoodApolloProvider>
-              </ChakraProvider>
-            </Web3Provider>
-
+                </Web3Provider>
+              </RedwoodApolloProvider>
+            </ChakraProvider>
           </AuthProvider>
         )}
       </RedwoodProvider>

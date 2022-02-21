@@ -6,25 +6,22 @@ export const schema = gql`
     category: CATEGORY!
   }
 
-  enum TYPE{
+  enum TYPE {
     image
     video
   }
 
-  enum CATEGORY{
+  enum CATEGORY {
     founders
     regular
     genesis
   }
 
-
   type Query {
-    assets(type:TYPE!): [Asset!] @skipAuth
+    assets(type: TYPE!): [Asset!] @skipAuth
   }
 
   type mutation {
-    createAsset(type:TYPE!,category:CATEGORY!):Asset! @skipAuth
+    createAsset(type: TYPE!, category: CATEGORY!): Asset! @skipAuth
   }
-
-
 `
