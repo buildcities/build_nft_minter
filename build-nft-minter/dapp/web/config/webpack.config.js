@@ -15,6 +15,7 @@ module.exports = (config, { mode }) => {
     url: require.resolve(`url/`),
     assert: require.resolve(`assert/`),
     crypto: require.resolve(`crypto-browserify`),
+    path: require.resolve('path-browserify'),
   }
   config.plugins.push(
     new webpack.ProvidePlugin({

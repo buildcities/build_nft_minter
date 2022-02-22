@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.5",
+    "@rarible/web3-ethereum": "^0.12.47",
     "@redwoodjs/forms": "v0.44.1",
     "@redwoodjs/router": "v0.44.1",
     "@redwoodjs/web": "v0.44.1",
@@ -31,6 +32,7 @@
     "magic-sdk": "^8.0.1",
     "moralis": "^1.3.2",
     "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
     "process": "^0.11.10",
     "prop-types": "15.8.1",
     "react": "17.0.2",
@@ -41,12 +43,14 @@
     "stream-http": "^3.2.0",
     "url": "^0.11.0",
     "util": "^0.12.4",
+    "web3": "^1.7.0",
     "zustand": "^3.7.0"
   },
   "devDependencies": {
     "@chakra-ui/react": "^1.8.3",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@rarible/sdk": "^0.8.38",
     "framer-motion": "^4"
   }
 }

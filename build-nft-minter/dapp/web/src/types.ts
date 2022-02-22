@@ -18,6 +18,8 @@ export type formInputs = {
   showPrice?: boolean
   price?: number
   royaltiesAmount?: number
+  isLazy?: string
+  collectionAddress?: string
   mediaFormat?: 'video' | 'image'
 }
 

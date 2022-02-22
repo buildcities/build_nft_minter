@@ -36,6 +36,8 @@ export const fetchOwnedTokens = async (
   chain?: string,
   opts: { size?: number; continuation?: string } = {}
 ) => {
+  console.log(chain)
+  console.log(owner)
   const { continuation, size = 100 } = opts
   const url = await prepareRaribleUrl('byOwner', chain)
   try {
@@ -55,7 +57,7 @@ export const fetchOwnedTokens = async (
     // Return full history
     return await Promise.all(
       [...data.items, ...hist].map(async (data) => {
-        const metaData = await fetchTokenMetadata(data.id, chain)
+        const metaData = getTokenMetadata(data).meta
         const assetLink = await prepareAssetLink(data.id, chain)
         const mediaLink =
           metaData?.animation?.url?.ORIGINAL || metaData?.image?.url?.ORIGINAL
@@ -66,6 +68,19 @@ export const fetchOwnedTokens = async (
     console.error(err)
     return []
   }
+}
+
+const getTokenMetadata = (data: {
+  meta: {
+    animation?: { url?: { ORIGINAL?: string } }
+    image?: { url?: { ORIGINAL?: string } }
+    tokenId: string
+    id:string,
+    name: string
+    description: string
+  }
+}) => {
+  return data
 }
 
 const fetchTokenMetadata = async (id: string, chain: string) => {

@@ -3,6 +3,7 @@ import { formInputs } from 'src/types'
 import { omitBy, isNull } from 'lodash'
 import axios from 'axios'
 import { navigate, routes } from '@redwoodjs/router'
+import { mint } from './rarible'
 
 const prepareMedia = async (format: 'video' | 'image', type: string) => {
   return (await (
@@ -48,19 +49,20 @@ const saveToIPFS = async (payload: formInputs) => {
 }
 
 const prepareMintArgs = async (data: formInputs) => {
-  const { tokenType, qty, price, royaltiesAmount } = data
+  const { tokenType, qty, price, royaltiesAmount, isLazy: _isLazy,collectionAddress } = data
   const listTokenValue = price ? +Moralis.Units.ETH(price) : null
   const list = price ? true : null
   const listAssetClass = price ? 'ETH' : null
   const listTokenAmount = price ? +qty : null
   const web3 = getWeb3Client()
-  const chain = normalizeChain(web3.network.name)
+  const chain = web3.network.name
   const userAddress = await web3.getSigner().getAddress()
   //const userAddress = owner
   const supply = qty * 1
   const fileItem = (await await saveToIPFS(data)) as unknown as {
     _ipfs: string
   }
+  const isLazy = JSON.parse(_isLazy)
   const options = {
     chain,
     userAddress,
@@ -69,9 +71,11 @@ const prepareMintArgs = async (data: formInputs) => {
     supply,
     royaltiesAmount: royaltiesAmount ? royaltiesAmount * 100 : null,
     list,
+    collectionAddress,
     listTokenValue,
     listTokenAmount,
     listAssetClass,
+    isLazy,
   }
   return omitBy(options, isNull)
 }
@@ -81,7 +85,8 @@ export const mintNFT = async (data: formInputs) => {
   // return result
   const options = await prepareMintArgs(data)
   //return options
-  return await Moralis.Plugins.rarible.lazyMint(options)
+  //return await Moralis.Plugins.rarible.lazyMint(options)
+  return await mint(options as any)
 }
 
 export const getWeb3Client = () => {

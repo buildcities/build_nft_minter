@@ -5,6 +5,7 @@ import {
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
+import { HiddenField } from '@redwoodjs/forms'
 import React, { useState } from 'react'
 import FormControl from 'src/components/FormControl/FormControl'
 import TextField from 'src/components/TextInputField/TextInputField'
@@ -18,8 +19,13 @@ const MinterForm: React.FC<{
   isBusy?: boolean
 }> = ({ onSubmit, isBusy }) => {
   const [showPrice, setShowPrice] = useState(false)
+  const [lazyMint, setLazyMint] = useState(false)
   const onChange = () => {
     setShowPrice((state) => !state)
+  }
+
+  const onChangeLazy = () => {
+    setLazyMint((state) => !state)
   }
   return (
     <Box
@@ -46,6 +52,15 @@ const MinterForm: React.FC<{
               <TextAreaField
                 validation={{ required: true }}
                 placeholder="Enter your awesome description"
+                {...props}
+              />
+            )}
+          </FormControl>
+          <FormControl label="Collection address" name="collectionAddress">
+            {(props) => (
+              <TextField
+                validation={{ required: true }}
+                placeholder="Leave it empyt to use rarible collection"
                 {...props}
               />
             )}
@@ -98,6 +113,11 @@ const MinterForm: React.FC<{
               />
             )}
           </FormControl>
+          <FormControl label="Lazy mint" name="lazyMint">
+            {() => (
+              <Switch isChecked={lazyMint} onChange={onChangeLazy} size="lg" />
+            )}
+          </FormControl>
           <FormControl label="List for sale" name="forSale">
             {() => (
               <Switch isChecked={showPrice} onChange={onChange} size="lg" />
@@ -116,6 +136,7 @@ const MinterForm: React.FC<{
               </FormControl>
             </Collapse>
           </Box>
+          <HiddenField value={`${lazyMint}`} name="isLazy" />
           <SubmitFormButton isBusy={isBusy}>Mint</SubmitFormButton>
         </VStack>
       </Form>
