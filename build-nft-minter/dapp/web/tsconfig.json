@@ -5,6 +5,7 @@
     "esModuleInterop": true,
     "target": "esnext",
     "module": "esnext",
+    "resolveJsonModule": true,
     "moduleResolution": "Node",
     "baseUrl": "./",
     "rootDirs": [

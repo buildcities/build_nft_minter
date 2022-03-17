@@ -1,5 +1,26 @@
 import Moralis from 'moralis/node'
-import axios from 'axios'
+import { collectionAbi } from './abi/collection'
+import { db } from 'src/lib/db'
+import { groupBy } from 'lodash'
+
+type extendedNativeRunContractType = {
+  runContractFunction: (options: {
+    chain: string
+    address: string
+    function_name: string
+    abi: any
+    params?: any
+  }) => Promise<any>
+}
+type metadataType = {
+  name?: string
+  description?: string
+  attributes?: [{ trait_type: string; value: string }]
+  mediaType?: string
+  animation_url: string
+  external_url: string
+  image: string
+}
 
 export const initMoralis = async () => {
   return await Moralis.start({
@@ -9,85 +30,141 @@ export const initMoralis = async () => {
   })
 }
 
-const prepareRaribleUrl = async (apiPath: string, chain: string) => {
-  // const web3 = await getWeb3Client()
-  // const chain = web3.network.name
+const getContractAddressFromChain = (chain: string) => {
   switch (chain) {
-    case 'homestead':
-      return `${process.env.RAR_PRODUCTION}${apiPath}`
+    case '0x1':
+      return process.env.MAINNET_TOKEN_CONTRACT
     default:
-      return `${process.env.RAR_STAGING}${apiPath}`
+      return process.env.RINKEBY_TOKEN_CONTRACT
   }
 }
+const prepareTokenResult = async (
+  result: {
+    name: string
+    token_uri?: string
+    symbol: string
+    contract_type?: string
+    token_address?: string
+    token_id?: string
+    amount?: string
+    owner_of?: string
+    metadata?: string
+    mediaType?: string
+  }[]
+) => {
+  const prepareURI = (uri: string) => 'ipfs://' + uri.split('/').pop()
 
-const prepareAssetLink = async (id: string, chain: string) => {
-  // const web3 = await getWeb3Client()
-  // const chain = web3.network.name
-  switch (chain) {
-    case 'homestead':
-      return `https://rarible.com/token/${id}`
-    default:
-      return `https://rinkeby.rarible.com/token/${id}`
-  }
+  const prepareMediaLink = (type: string, asset: string) =>
+    asset + '.' + type.split('/').pop()
+
+  const groups = groupBy(result, (item) => prepareURI(item.token_uri))
+
+  const mediaTypes = await db.asset.findMany({
+    where: { metadataLink: { in: Object.keys(groups) } },
+    select: { metadataLink: true, mediaType: true },
+  })
+  const mappedMediaTypes = groupBy(mediaTypes, (item) => item.metadataLink)
+  return result
+    .filter((item) => item?.metadata)
+    .map(({ metadata, token_address, token_id, token_uri }) => {
+      const _meta = JSON.parse(metadata) as metadataType
+
+      const mediaType = mappedMediaTypes[prepareURI(token_uri)]
+        ? mappedMediaTypes[prepareURI(token_uri)][0]?.mediaType
+        : ''
+      const { description, animation_url, image, external_url, name } = _meta
+      return {
+        id: token_address + token_id,
+        name,
+        description,
+        mediaType,
+        mediaLink: prepareMediaLink(mediaType, animation_url || image),
+        assetLink: prepareMediaLink(
+          mediaType,
+          external_url || animation_url || image
+        ),
+      }
+    })
 }
 
 export const fetchOwnedTokens = async (
   owner: string,
   chain?: string,
-  opts: { size?: number; continuation?: string } = {}
+  tokenContract?: string
 ) => {
-  console.log(chain)
-  console.log(owner)
-  const { continuation, size = 100 } = opts
-  const url = await prepareRaribleUrl('byOwner', chain)
-  try {
-    const result = await axios.get(url, {
-      params: { owner: `${owner}`, continuation },
-    })
-    const { data } = result
-
-    // Paginate results
-    let hist = []
-    if (data.continuation && data.items.length === size) {
-      hist = await fetchOwnedTokens(owner, chain, {
-        ...opts,
-        continuation: data.continuation,
+  await initMoralis()
+  const data = tokenContract
+    ? await Moralis.Web3API.account.getNFTsForContract({
+        chain: chain as unknown as any,
+        address: owner,
+        token_address: getContractAddressFromChain(chain),
       })
-    }
-    // Return full history
-    return await Promise.all(
-      [...data.items, ...hist].map(async (data) => {
-        const metaData = getTokenMetadata(data).meta
-        const assetLink = await prepareAssetLink(data.id, chain)
-        const mediaLink =
-          metaData?.animation?.url?.ORIGINAL || metaData?.image?.url?.ORIGINAL
-        return { id: data.tokenId, ...metaData, assetLink, mediaLink }
+    : await Moralis.Web3API.account.getNFTs({
+        chain: chain as unknown as any,
+        address: owner,
       })
-    )
-  } catch (err) {
-    console.error(err)
-    return []
-  }
+  //console.log(data.result)
+  return prepareTokenResult(data?.result)
 }
 
-const getTokenMetadata = (data: {
-  meta: {
-    animation?: { url?: { ORIGINAL?: string } }
-    image?: { url?: { ORIGINAL?: string } }
-    tokenId: string
-    id:string,
-    name: string
-    description: string
-  }
-}) => {
-  return data
+const prepareCollectionResult = (
+  result: [name: string, tokenSymbol: string, contractAddress: string][]
+) => {
+  return result.map(([name, tokenSymbol, contractAddress]) => ({
+    id: contractAddress,
+    name,
+    symbol: tokenSymbol,
+    contractAddress,
+  }))
 }
 
-const fetchTokenMetadata = async (id: string, chain: string) => {
-  const url = await prepareRaribleUrl(`${id}/meta`, chain)
-  const { data } = await axios.get(url)
-  if (!data?.name) {
-    throw new Error('Invalid NFT data')
-  }
-  return data
+export const fetchCollectionTokens = async (
+  collectionId: string,
+  chain: string
+) => {
+  await initMoralis()
+  const data = await Moralis.Web3API.token.getAllTokenIds({
+    chain: chain as unknown as any,
+    address: collectionId,
+  })
+  //console.log(data)
+  const _data = await db.asset.findMany({
+    where: {
+      metadataLink: {
+        in: data.result.map((x) => 'ipfs://' + x.token_uri.split('/').pop()),
+      },
+    },
+    select: { mediaType: true },
+  })
+  //console.log(_data)
+  return prepareTokenResult(data.result)
+}
+
+export const fetchOwnedCollections = async (owner: string, chain?: string) => {
+  await initMoralis()
+  const native = Moralis.Web3API.native as extendedNativeRunContractType
+  const result = await native.runContractFunction({
+    chain: chain,
+    address: getContractAddressFromChain(chain),
+    function_name: 'ownerCollections',
+    abi: collectionAbi,
+    params: {
+      owner,
+    },
+  })
+  console.log(result)
+  return prepareCollectionResult(result as unknown as [])
+}
+
+export const fetchCollections = async (chain?: string) => {
+  await initMoralis()
+  const native = Moralis.Web3API.native as extendedNativeRunContractType
+  const result = await native.runContractFunction({
+    chain: chain as unknown as any,
+    address: getContractAddressFromChain(chain),
+    function_name: 'allCollections',
+    abi: collectionAbi,
+  })
+  console.log(result)
+  return prepareCollectionResult(result as unknown as [])
 }

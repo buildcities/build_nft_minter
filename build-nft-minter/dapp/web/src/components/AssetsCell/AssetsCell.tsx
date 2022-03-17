@@ -1,19 +1,27 @@
 import type { AssetsQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import CardItem from '../CardItem/CardItem'
-import { Box, Center, Flex, Spinner, Text } from '@chakra-ui/react'
+import {
+  Badge,
+  Box,
+  Button,
+  Center,
+  Flex,
+  Spinner,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react'
 import CardItemButton from '../CardItemButton/CardItemButton'
+import { isVideo } from 'src/utils'
+import { GET_ASSETS_QUERY } from 'src/utils/queries/assets'
+import { EditIcon } from '@chakra-ui/icons'
+import SideDrawer from '../SideDrawer/SideDrawer'
+import { useStore } from 'src/utils/stores/asset-form'
+import AssetDetail from '../AssetDetail/AssetDetail'
 
-export const QUERY = gql`
-  query AssetsQuery($type: TYPE!) {
-    assets(type: $type) {
-      id
-      type
-      category
-      source
-    }
-  }
-`
+const HEADER = 'Asset Detail'
+
+export const QUERY = GET_ASSETS_QUERY
 
 export const Loading = () => (
   <Box>
@@ -43,22 +51,45 @@ export const Success: React.FC<CellSuccessProps<AssetsQuery>> = ({
   assets,
   children,
 }) => {
+  const { setAsset } = useStore((s) => s)
+  const { onOpen, onClose, ...props } = useDisclosure()
+  const _onOpen = (payload: any) => () => {
+    console.log(payload)
+    setAsset(JSON.stringify(payload))
+    onOpen && onOpen()
+  }
   return (
-    <Flex align="center" justify="center" gap={8}>
+    <Flex flexWrap={'wrap'} px="10" justify="start" gap={8}>
       {children}
       {assets.map((item) => {
         return (
           <CardItem
-            subTitle={item.type}
-            title={item.category}
+            title={item.name}
             key={item.id}
-            src={item.source}
-            isVideo={item.type == 'video'}
-            videoProps={item.type == 'video' ? { controls: true } : null}
-            externalUrl={item.source}
-          />
+            src={item.assetLink}
+            isVideo={isVideo(item?.mediaType)}
+            videoProps={isVideo(item?.mediaType) ? { controls: true } : null}
+            externalUrl={item.assetLink}
+          >
+            <Button
+              size={'xs'}
+              onClick={_onOpen(item)}
+              colorScheme={item.isDynamic ? 'green' : 'red'}
+              bg={item.isDynamic ? 'green.400' : 'red.400'}
+              rounded={'full'}
+              _hover={{
+                bg: item.isDynamic ? 'green.300' : 'red.300',
+              }}
+              leftIcon={<EditIcon />}
+            >
+              {item.isDynamic ? 'Dynamic' : 'Fixed'}
+            </Button>
+          </CardItem>
         )
       })}
+      <SideDrawer header={HEADER} onClose={onClose} {...props}>
+        <AssetDetail onClose={onClose} />
+      </SideDrawer>
     </Flex>
   )
 }

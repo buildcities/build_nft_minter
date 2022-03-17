@@ -12,7 +12,7 @@ const LogoutButton = () => {
       rounded="full"
       bg={'red.400'}
       _hover={{
-        bg: 'reed.300',
+        bg: 'red.300',
       }}
       onClick={logOut}
     >

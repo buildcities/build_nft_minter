@@ -4,15 +4,17 @@ import MinterForm from 'src/components/MinterForm/MinterForm'
 import CardItemButton from 'src/components/CardItemButton/CardItemButton'
 import SideDrawer from 'src/components/SideDrawer/SideDrawer'
 import TokenList from 'src/components/TokensCell'
+import CollectionTokenList from 'src/components/CollectionTokensCell'
 import { formInputs } from 'src/types'
 import { mintNFT } from 'src/utils'
 import { useState } from 'react'
 import { useApolloClient } from '@apollo/client'
 import { useStore } from 'src/utils/stores/ui'
+import { Moralis } from 'moralis'
 
 const HEADER = 'Mint a token'
 
-const TokensPage = () => {
+const TokensPage = ({ contractAddress }) => {
   const { onOpen, onClose, ...props } = useDisclosure()
   const [busy, setBusy] = useState(false)
   const { chain, account } = useStore((s) => s)
@@ -42,10 +44,15 @@ const TokensPage = () => {
         Tokens
       </Heading>
 
-      <TokenList onOpen={onOpen} owner={account} chain={chain}>
-        <CardItemButton onClick={onOpen} subTitle="Mint" title="New Token" />
-      </TokenList>
-
+      {contractAddress ? (
+        <CollectionTokenList collectionId={contractAddress} chain={chain}>
+          <CardItemButton onClick={onOpen} subTitle="Mint" title="New Token" />
+        </CollectionTokenList>
+      ) : (
+        <TokenList onOpen={onOpen} owner={account} chain={chain}>
+          <CardItemButton onClick={onOpen} subTitle="Mint" title="New Token" />
+        </TokenList>
+      )}
       <SideDrawer header={HEADER} onClose={onClose} {...props}>
         <MinterForm isBusy={busy} onSubmit={onSubmit} />
       </SideDrawer>

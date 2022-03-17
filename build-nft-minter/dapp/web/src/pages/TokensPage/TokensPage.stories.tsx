@@ -1,7 +1,7 @@
 import TokensPage from './TokensPage'
 
 export const generated = () => {
-  return <TokensPage />
+  return <TokensPage contractAddress={'testContractAddress'} />
 }
 
 export default { title: 'Pages/TokensPage' }

@@ -1,33 +1,39 @@
 import { navigate, routes } from '@redwoodjs/router'
-import Moralis from 'moralis'
+import {Moralis} from 'moralis'
 import { useEffect } from 'react'
-import { getActiveChain } from 'src/utils'
+import { getActiveChain, getWeb3Client } from 'src/utils'
 import { useStore } from 'src/utils/stores/ui'
-
-const logOutUnsubscribe = Moralis.onWeb3Deactivated(() => {
-  navigate(routes.reAuth())
-})
-const deactivateUnsubscribe = Moralis.onChainChanged((result) => {
-  console.log(Moralis.web3.network.name)
-  useStore.getState().setChain(getActiveChain(result))
-})
-const activateUnsubscribe = Moralis.onAccountChanged((result) => {
-  useStore.getState().setAccount(result)
-})
-const loginUnsubscribe = Moralis.onWeb3Enabled(() => {
-  useStore.getState().setChain(getActiveChain(Moralis.chainId))
-  useStore.getState().setAccount(Moralis.account)
-})
+import { useAuth } from '@redwoodjs/auth'
+import { getCurrentUser, isAuthenticated } from '../../../../api/src/lib/auth'
 
 const Web3Provider: React.FC = ({ children }) => {
+  const { setAccount, setChain } = useStore((s) => s)
+  const { userMetadata,isAuthenticated } = useAuth()
+  const handleChainChanged = async (chainId) => {
+    console.log(chainId)
+    setChain(chainId)
+  }
+
+  const handleAccountsChanged = async (accounts: string[]) => {
+    console.log(accounts[0])
+    setAccount(accounts[0])
+  }
   useEffect(() => {
-    return () => {
-      logOutUnsubscribe()
-      deactivateUnsubscribe()
-      activateUnsubscribe()
-      loginUnsubscribe()
+
+    if (isAuthenticated) {
+      const provider = (window as any).ethereum || Moralis.provider
+      if (provider) {
+        setChain(provider.chainId)
+        setAccount(userMetadata.get('ethAddress'))
+        provider.on('chainChanged', handleChainChanged)
+        provider.on('accountsChanged', handleAccountsChanged)
+      }
+      return () => {
+        provider.removeListener('chainChanged', handleChainChanged)
+        provider.removeListener('accountsChanged', handleAccountsChanged)
+      }
     }
-  }, [])
+  }, [isAuthenticated])
 
   return <div>{children}</div>
 }

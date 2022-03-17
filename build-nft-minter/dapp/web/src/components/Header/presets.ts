@@ -6,6 +6,10 @@ export const NAV_ITEMS: () => Array<NavItem> = () => [
     href: routes.tokens(),
   },
   {
+    label: 'Collections',
+    href: routes.collections(),
+  },
+  {
     label: 'Assets',
     href: routes.assets(),
   },

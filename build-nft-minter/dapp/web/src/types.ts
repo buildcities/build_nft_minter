@@ -9,18 +9,20 @@ export interface NavProps {
   navItems?: NavItem[]
 }
 
+export type collectionFormInputs = {
+  _name?: string
+  _symbol?: string
+  _maxSupply?: number
+}
+
 export type formInputs = {
   qty?: number
-  name?: string
-  description?: string
-  type?: string
+  asset?: string
+  collection?: string
+  isLazy?: boolean
   tokenType?: string
-  showPrice?: boolean
   price?: number
   royaltiesAmount?: number
-  isLazy?: string
-  collectionAddress?: string
-  mediaFormat?: 'video' | 'image'
 }
 
 export type assetFormInputs = {

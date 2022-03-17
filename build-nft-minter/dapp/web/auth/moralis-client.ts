@@ -9,7 +9,7 @@ const logout = async () => {
   return await Moralis.User.logOut()
 }
 
-const getToken = async () => {
+const getToken =  async () => {
   return Moralis.User.current().getSessionToken()
 }
 

@@ -8,7 +8,7 @@ import TokensPage from './TokensPage'
 describe('TokensPage', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<TokensPage />)
+      render(<TokensPage contractAddress={'dummy-contract-address'} />)
     }).not.toThrow()
   })
 })

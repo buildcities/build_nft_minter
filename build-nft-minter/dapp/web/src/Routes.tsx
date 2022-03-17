@@ -14,8 +14,10 @@ const Routes = () => {
   return (
     <Router>
       <Private unauthenticated="home" wrap={[MainLayout]}>
+        <Route path="/collections" page={CollectionsPage} name="collections" />
         <Route path="/re-auth" page={ReAuthPage} name="reAuth" />
         <Route path="/assets" page={AssetsPage} name="assets" />
+        <Route path="/tokens/{contractAddress}" page={TokensPage} name="tokens" />
         <Route path="/tokens" page={TokensPage} name="tokens" />
       </Private>
       <Route path="/" page={HomePage} name="home" />

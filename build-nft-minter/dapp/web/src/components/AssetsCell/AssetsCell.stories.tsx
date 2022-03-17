@@ -6,13 +6,7 @@ export const loading = () => {
 }
 
 export const empty = () => {
-  return Empty ? (
-    <Empty
-      onOpen={function (): void {
-        throw new Error('Function not implemented.')
-      }}
-    />
-  ) : null
+  return Empty ? <Empty /> : null
 }
 
 export const failure = () => {

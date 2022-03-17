@@ -5,7 +5,7 @@ interface FormControlChild extends StyleProps {
   name: string
 }
 
-interface FormControlProps extends StyleProps {
+export interface FormControlProps extends StyleProps {
   name?: string
   children?: (payload: FormControlChild) => React.ReactNode
   helperText?: string

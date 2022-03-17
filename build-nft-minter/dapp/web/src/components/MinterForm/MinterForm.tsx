@@ -5,28 +5,45 @@ import {
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
-import { HiddenField } from '@redwoodjs/forms'
-import React, { useState } from 'react'
+import { HiddenField, useForm, useWatch } from '@redwoodjs/forms'
+import React, { useEffect, useState } from 'react'
 import FormControl from 'src/components/FormControl/FormControl'
 import TextField from 'src/components/TextInputField/TextInputField'
 import SelectField from 'src/components/SelectInputField/SelectInputField'
 import TextAreaField from 'src/components/TextAreaField/TextAreaField'
 import { Form } from '@redwoodjs/forms'
 import SubmitFormButton from '../SubmitFormButton/SubmitFormButton'
+import SelectAssetsCell from 'src/components/SelectAssetsCell'
+import SelectCollectionCell from 'src/components/SelectCollectionCell'
+import { useStore } from 'src/utils/stores/ui'
+import { isEmpty } from 'lodash'
+import CustomFormInput from '../CustomFormInput/CustomFormInput'
 
 const MinterForm: React.FC<{
   onSubmit?: (payload: Record<string, unknown>) => void
   isBusy?: boolean
 }> = ({ onSubmit, isBusy }) => {
   const [showPrice, setShowPrice] = useState(false)
-  const [lazyMint, setLazyMint] = useState(false)
-  const onChange = () => {
+
+  const { chain, account } = useStore((s) => s)
+
+  const formMethods = useForm()
+
+  const _selectedCollection = useWatch({
+    name: 'collection',
+    control: formMethods.control,
+  })
+
+  const onChangePrice = () => {
     setShowPrice((state) => !state)
   }
 
-  const onChangeLazy = () => {
-    setLazyMint((state) => !state)
-  }
+  useEffect(() => {
+    if (!_selectedCollection) {
+      formMethods.setValue('price', undefined)
+    }
+  }, [_selectedCollection])
+
   return (
     <Box
       bg={useColorModeValue('white', 'gray.700')}
@@ -36,65 +53,33 @@ const MinterForm: React.FC<{
       color={useColorModeValue('gray.700', 'whiteAlpha.900')}
       shadow="base"
     >
-      <Form onSubmit={onSubmit}>
+      <Form formMethods={formMethods} onSubmit={onSubmit}>
         <VStack spacing={5}>
-          <FormControl label="NFT name" name="name">
-            {(props) => (
-              <TextField
-                validation={{ required: true }}
-                placeholder="e.g build_ founders passport batch -1"
-                {...props}
-              />
-            )}
+          <FormControl
+            description="Select an asset for your NFT"
+            label="Assets"
+            name="asset"
+          >
+            {(props) => <SelectAssetsCell {...props} />}
           </FormControl>
-          <FormControl label="NFT description" name="description">
+          <FormControl
+            description="Group your assets in a unique collection"
+            label="Collections"
+            name="collection"
+          >
             {(props) => (
-              <TextAreaField
-                validation={{ required: true }}
-                placeholder="Enter your awesome description"
-                {...props}
-              />
-            )}
-          </FormControl>
-          <FormControl label="Collection address" name="collectionAddress">
-            {(props) => (
-              <TextField
-                validation={{ required: true }}
-                placeholder="Leave it empyt to use rarible collection"
-                {...props}
-              />
-            )}
-          </FormControl>
-          <FormControl label="Type" name="type">
-            {(props) => (
-              <SelectField
-                validation={{ required: true }}
-                placeholder="e.g 1"
-                {...props}
-              >
-                <option value="genesis">Genesis</option>
-                <option value="founders">Founders</option>
-                <option value="regular">Regular</option>
-              </SelectField>
+              <SelectCollectionCell chain={chain} owner={account} {...props} />
             )}
           </FormControl>
 
           <FormControl label="Token Type" name="tokenType">
             {(props) => (
               <SelectField validation={{ required: true }} {...props}>
-                <option>ERC1155</option>
                 <option>ERC721</option>
               </SelectField>
             )}
           </FormControl>
-          <FormControl label="Media format" name="mediaFormat">
-            {(props) => (
-              <SelectField validation={{ required: true }} {...props}>
-                <option value="video">Video</option>
-                <option value="image">Image</option>
-              </SelectField>
-            )}
-          </FormControl>
+
           <FormControl label="Qauntiy" name="qty">
             {(props) => (
               <TextField
@@ -113,30 +98,49 @@ const MinterForm: React.FC<{
               />
             )}
           </FormControl>
-          <FormControl label="Lazy mint" name="lazyMint">
-            {() => (
-              <Switch isChecked={lazyMint} onChange={onChangeLazy} size="lg" />
-            )}
-          </FormControl>
-          <FormControl label="List for sale" name="forSale">
-            {() => (
-              <Switch isChecked={showPrice} onChange={onChange} size="lg" />
-            )}
-          </FormControl>
           <Box width={'full'}>
-            <Collapse in={showPrice} animateOpacity>
-              <FormControl width={'full'} label="Price" name="price">
-                {(props) => (
-                  <TextField
-                    validation={{ required: false }}
-                    placeholder="NFT price in eth"
-                    {...props}
+            <Collapse in={isEmpty(_selectedCollection)} animateOpacity>
+              <CustomFormInput
+                description="Mint at zero cost, pass the minting cost to buyer"
+                label="Lazy mint"
+                name="isLazy"
+              >
+                {({ onChange, value }) => (
+                  <Switch
+                    colorScheme={'green'}
+                    isChecked={value}
+                    onChange={onChange}
+                    value={value}
+                    size="lg"
+                  />
+                )}
+              </CustomFormInput>
+
+              <FormControl label="List for sale" name="forSale">
+                {() => (
+                  <Switch
+                    isChecked={showPrice}
+                    onChange={onChangePrice}
+                    size="lg"
                   />
                 )}
               </FormControl>
+              <Box width={'full'}>
+                <Collapse in={showPrice} animateOpacity>
+                  <FormControl width={'full'} label="Price" name="price">
+                    {(props) => (
+                      <TextField
+                        validation={{ required: false }}
+                        placeholder="NFT price in eth"
+                        {...props}
+                      />
+                    )}
+                  </FormControl>
+                </Collapse>
+              </Box>
             </Collapse>
           </Box>
-          <HiddenField value={`${lazyMint}`} name="isLazy" />
+
           <SubmitFormButton isBusy={isBusy}>Mint</SubmitFormButton>
         </VStack>
       </Form>

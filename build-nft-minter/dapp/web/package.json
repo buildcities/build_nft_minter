@@ -14,10 +14,10 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.5",
-    "@rarible/web3-ethereum": "^0.12.47",
     "@redwoodjs/forms": "v0.44.1",
     "@redwoodjs/router": "v0.44.1",
     "@redwoodjs/web": "v0.44.1",
+    "@types/firebase": "^3.2.1",
     "@types/lodash": "^4.14.178",
     "@walletconnect/web3-provider": "^1.7.1",
     "@web3auth/web3auth": "^0.2.4",
@@ -25,6 +25,8 @@
     "axios": "^0.26.0",
     "cloudinary": "^1.28.1",
     "crypto-browserify": "^3.12.0",
+    "firebase": "^9.6.8",
+    "firebase-file-uploader-react": "https://github.com/rollymaduk/firebase-file-uploader-react.git",
     "https-browserify": "^1.0.0",
     "immer": "^9.0.12",
     "localstorage-slim": "^2.2.0",
@@ -42,6 +44,7 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "url": "^0.11.0",
+    "use-file-picker": "^1.4.1",
     "util": "^0.12.4",
     "web3": "^1.7.0",
     "zustand": "^3.7.0"
@@ -50,7 +53,6 @@
     "@chakra-ui/react": "^1.8.3",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@rarible/sdk": "^0.8.38",
     "framer-motion": "^4"
   }
 }

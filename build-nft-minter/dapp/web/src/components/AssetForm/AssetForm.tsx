@@ -1,21 +1,71 @@
-import { Box, Collapse, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, Switch, useColorModeValue, VStack } from '@chakra-ui/react'
 
-import { Form, useWatch, useForm } from '@redwoodjs/forms'
+import { Form, useWatch, useForm, HiddenField } from '@redwoodjs/forms'
 import FormControl from 'src/components/FormControl/FormControl'
-import SelectField from 'src/components/SelectInputField/SelectInputField'
+import TextField from 'src/components/TextInputField/TextInputField'
+import TextAreaField from 'src/components/TextAreaField/TextAreaField'
 import SubmitFormButton from '../SubmitFormButton/SubmitFormButton'
+import MediaSelector from '../MediaSelector/MediaSelector'
+//import MediaSelector from '../IpfsMediaSelector/IpfsMediaSelector'
+import CustomFormInput from '../CustomFormInput/CustomFormInput'
+import { isEmpty, kebabCase } from 'lodash'
+import AttributesWidget from '../AttributesWidget/AttributesWidget'
+import { useStore } from 'src/utils/stores/asset-form'
+import { useEffect } from 'react'
+import Moralis from 'moralis'
+import { getWeb3Client } from 'src/utils'
+import { GET_ASSETS_QUERY } from 'src/utils/queries/assets'
+import { CREATE_ASSET_MUTATION } from 'src/utils/mutations/assets'
+import { useMutation } from '@redwoodjs/web'
 
 type AssetFormType = {
-  onSubmit?: (payload: AssetFormType) => void
+  onClose: () => void
 }
 
-export default function AssetForm({ onSubmit }: AssetFormType) {
-  const formMethods = useForm()
-  const formatType = useWatch({
-    name: 'mediaFormat',
+export default function AssetForm({ onClose }: AssetFormType) {
+  const { selectedAsset, setAsset } = useStore((s) => s)
+  const formMethods = useForm({ defaultValues: JSON.parse(selectedAsset) })
+  const assetName = useWatch({
+    name: 'name',
     control: formMethods.control,
-    defaultValue: 'video',
   })
+
+  const _mediaType = useWatch({
+    name: 'mediaType',
+    control: formMethods.control,
+  })
+
+  const [create, { loading, error, reset }] = useMutation(
+    CREATE_ASSET_MUTATION,
+    {
+      refetchQueries: [GET_ASSETS_QUERY],
+    }
+  )
+  const onSubmit = (input) => {
+    getWeb3Client()
+    console.log(input)
+    create({
+      variables: { input: { ...input, walletAddress: Moralis.account } },
+    }).then(() => {
+      reset()
+      formMethods.reset()
+      onClose && onClose()
+      setAsset(null)
+    })
+  }
+
+  const onMediaTypeChange = (payload: string) => {
+    if (payload) {
+      formMethods.setValue('mediaType', payload)
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      console.log(JSON.stringify(formMethods.getValues()))
+      setAsset(JSON.stringify(formMethods.getValues()))
+    }
+  }, [])
 
   return (
     <Box
@@ -28,47 +78,62 @@ export default function AssetForm({ onSubmit }: AssetFormType) {
     >
       <Form formMethods={formMethods} onSubmit={onSubmit}>
         <VStack spacing={5}>
-          <FormControl label="Type" name="type">
+          <CustomFormInput
+            description="Make NFT asset changeable"
+            label="Is Dynamic"
+            name="isDynamic"
+          >
+            {({ onChange, value }) => (
+              <Switch
+                colorScheme={'green'}
+                isChecked={value}
+                onChange={onChange}
+                value={value}
+                size="lg"
+              />
+            )}
+          </CustomFormInput>
+
+          <FormControl label="Asset name" name="name">
             {(props) => (
-              <SelectField
+              <TextField
                 validation={{ required: true }}
-                placeholder="e.g 1"
+                placeholder="e.g An awesome asset title"
                 {...props}
-              >
-                <option value="genesis">Genesis</option>
-                <option value="founders">Founders</option>
-                <option value="regular">Regular</option>
-              </SelectField>
+              />
             )}
           </FormControl>
-          <FormControl label="Media format" name="mediaFormat">
+          <CustomFormInput
+            width={'full'}
+            label="Asset"
+            name="asset"
+            description="Please enter asset name above to activate upload"
+          >
+            {({ name, onChange, value }) => (
+              <MediaSelector
+                path="minty"
+                name={name}
+                mediaType={_mediaType}
+                disabled={isEmpty(assetName)}
+                filename={(payload) => kebabCase(assetName)}
+                onChange={onChange}
+                onTypeChange={onMediaTypeChange}
+                value={value}
+              />
+            )}
+          </CustomFormInput>
+          <FormControl label="Asset description" name="description">
             {(props) => (
-              <SelectField validation={{ required: true }} {...props}>
-                <option value="video">Video</option>
-                <option value="image">Image</option>
-              </SelectField>
+              <TextAreaField
+                validation={{ required: true }}
+                placeholder="Enter your awesome description"
+                {...props}
+              />
             )}
           </FormControl>
-          <Box width={'full'}>
-            <Collapse in={formatType == 'video'} animateOpacity>
-              <FormControl
-                width={'full'}
-                label="Video length"
-                name="videoLength"
-              >
-                {(props) => (
-                  <SelectField validation={{ required: true }} {...props}>
-                    <option value="5">5 minute video</option>
-                    <option value="4">4 minute video</option>
-                    <option value="3">3 minute video</option>
-                    <option value="2">2 minute video</option>
-                    <option value="2">1 minute video</option>
-                  </SelectField>
-                )}
-              </FormControl>
-            </Collapse>
-          </Box>
-          <SubmitFormButton>Generate</SubmitFormButton>
+          <HiddenField name="mediaType" />
+          <AttributesWidget w="full" name="attributes" label="Attributes" />
+          <SubmitFormButton isBusy={loading}>Generate</SubmitFormButton>
         </VStack>
       </Form>
     </Box>

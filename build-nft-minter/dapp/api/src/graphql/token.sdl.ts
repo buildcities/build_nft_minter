@@ -5,10 +5,12 @@ export const schema = gql`
     description: String
     assetLink: String
     mediaLink: String
+    mediaType: String
   }
 
   type Query {
-    tokens(owner: String!, chain: String): [Token!] @skipAuth
+    tokens(owner: String!, chain: String, tokenContract: String): [Token!] @skipAuth
+    collectionTokens(collectionId: String!, chain: String!): [Token!] @skipAuth
   }
 
   # input TokenInput{
