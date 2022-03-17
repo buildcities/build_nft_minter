@@ -38,6 +38,12 @@ const getContractAddressFromChain = (chain: string) => {
       return process.env.RINKEBY_TOKEN_CONTRACT
   }
 }
+
+const prepareURI = (uri: string) => 'ipfs://' + uri.split('/').pop()
+
+const prepareMediaLink = (type: string, asset: string) =>
+  asset + '.' + type.split('/').pop()
+
 const prepareTokenResult = async (
   result: {
     name: string
@@ -53,67 +59,62 @@ const prepareTokenResult = async (
     block_number?: string
   }[]
 ) => {
-  const prepareURI = (uri: string) => 'ipfs://' + uri.split('/').pop()
+  const cleanData = result.filter((item) => item?.metadata && item?.token_uri)
 
-  const prepareMediaLink = (type: string, asset: string) =>
-    asset + '.' + type.split('/').pop()
-
-  const groups = groupBy(result, (item) => prepareURI(item.token_uri))
+  const groups = groupBy(cleanData, (item) => prepareURI(item.token_uri))
 
   const mediaTypes = await db.asset.findMany({
     where: { metadataLink: { in: Object.keys(groups) } },
     select: { metadataLink: true, mediaType: true },
   })
   const mappedMediaTypes = groupBy(mediaTypes, (item) => item.metadataLink)
-  console.log(result)
-  return result
-    .filter((item) => item?.metadata)
-    .map(
-      ({
-        metadata,
-        token_address,
-        token_id,
-        token_uri,
-        owner_of,
-        contract_type,
-        block_number,
-        symbol,
-        name:tokenName
-      }) => {
-        const _meta = JSON.parse(metadata) as metadataType
 
-        const mediaType = mappedMediaTypes[prepareURI(token_uri)]
-          ? mappedMediaTypes[prepareURI(token_uri)][0]?.mediaType
-          : ''
-        const {
-          description,
-          animation_url,
-          image,
-          external_url,
-          name,
-          attributes,
-        } = _meta
-        return {
-          id: token_address + token_id,
-          name,
-          description,
+  return cleanData.map(
+    ({
+      metadata,
+      token_address,
+      token_id,
+      token_uri,
+      owner_of,
+      contract_type,
+      block_number,
+      symbol,
+      name: tokenName,
+    }) => {
+      const _meta = JSON.parse(metadata) as metadataType
+
+      const mediaType = mappedMediaTypes[prepareURI(token_uri)]
+        ? mappedMediaTypes[prepareURI(token_uri)][0]?.mediaType
+        : ''
+      const {
+        description,
+        animation_url,
+        image,
+        external_url,
+        name,
+        attributes,
+      } = _meta
+      return {
+        id: token_address + token_id,
+        name,
+        description,
+        mediaType,
+        mediaLink: prepareMediaLink(mediaType, animation_url || image),
+        assetLink: prepareMediaLink(
           mediaType,
-          mediaLink: prepareMediaLink(mediaType, animation_url || image),
-          assetLink: prepareMediaLink(
-            mediaType,
-            external_url || animation_url || image
-          ),
-          contractAddress: token_address,
-          tokenId: token_id,
-          owner: owner_of,
-          blockNumber: block_number,
-          attributes,
-          contractType: contract_type,
-          symbol,
-          tokenName
-        }
+          external_url || animation_url || image
+        ),
+        contractAddress: token_address,
+        tokenId: token_id,
+        owner: owner_of,
+        blockNumber: block_number,
+        attributes,
+        contractType: contract_type,
+        symbol,
+        tokenName,
       }
-    )
+    }
+  )
 }
 
 export const fetchOwnedTokens = async (
@@ -181,7 +182,7 @@ export const fetchOwnedCollections = async (owner: string, chain?: string) => {
       owner,
     },
   })
-  console.log(result)
+  //console.log(result)
   return prepareCollectionResult(result as unknown as [])
 }
 
@@ -194,6 +195,6 @@ export const fetchCollections = async (chain?: string) => {
     function_name: 'allCollections',
     abi: collectionAbi,
   })
-  console.log(result)
+  //console.log(result)
   return prepareCollectionResult(result as unknown as [])
 }
