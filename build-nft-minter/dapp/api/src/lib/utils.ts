@@ -2,7 +2,7 @@ import Moralis from 'moralis/node'
 import { collectionAbi } from './abi/collection'
 import { db } from '../lib/db'
 import { groupBy } from 'lodash'
-
+//this is to allow me merge with main branch
 type extendedNativeRunContractType = {
   runContractFunction: (options: {
     chain: string
