@@ -35,12 +35,9 @@ export default function AssetForm({ onClose }: AssetFormType) {
     control: formMethods.control,
   })
 
-  const [create, { loading, error, reset }] = useMutation(
-    CREATE_ASSET_MUTATION,
-    {
-      refetchQueries: [GET_ASSETS_QUERY],
-    }
-  )
+  const [create, { loading, reset }] = useMutation(CREATE_ASSET_MUTATION, {
+    refetchQueries: [GET_ASSETS_QUERY],
+  })
   const onSubmit = (input) => {
     getWeb3Client()
     console.log(input)
@@ -115,7 +112,7 @@ export default function AssetForm({ onClose }: AssetFormType) {
                 name={name}
                 mediaType={_mediaType}
                 disabled={isEmpty(assetName)}
-                filename={(payload) => kebabCase(assetName)}
+                filename={() => kebabCase(assetName)}
                 onChange={onChange}
                 onTypeChange={onMediaTypeChange}
                 value={value}

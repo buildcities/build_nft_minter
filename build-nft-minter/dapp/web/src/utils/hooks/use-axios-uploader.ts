@@ -19,13 +19,13 @@ export default function useAxiosUploader(config: {
   }
 
   const upload = (file: File) => {
-    let formData = new FormData()
+    const formData = new FormData()
     formData.append('file', file)
     axios
 
       .post(config.url, formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
         onUploadProgress: onUploadProgress(setProgress),
       })

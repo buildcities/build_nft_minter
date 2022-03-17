@@ -15,14 +15,12 @@ export const useStore = create<IStore>((set) => ({
     set(
       produce((draft) => {
         draft.account = acct
-
       })
     ),
   setChain: (chain) =>
     set(
       produce((draft) => {
         draft.chain = chain
-
       })
     ),
 }))

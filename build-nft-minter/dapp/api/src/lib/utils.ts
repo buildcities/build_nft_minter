@@ -1,6 +1,6 @@
 import Moralis from 'moralis/node'
 import { collectionAbi } from './abi/collection'
-import { db } from 'src/lib/db'
+import { db } from '../lib/db'
 import { groupBy } from 'lodash'
 
 type extendedNativeRunContractType = {

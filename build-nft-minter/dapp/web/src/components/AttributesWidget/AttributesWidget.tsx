@@ -20,7 +20,7 @@ const AttributeControl = ({
     onRemove && onRemove(position)
   }
   return (
-    <HStack w='full' justify={'space-between'}>
+    <HStack w="full" justify={'space-between'}>
       <TextField
         placeholder="attribute name"
         validation={{ required: true }}
@@ -50,9 +50,9 @@ const AttributesWidget = ({ name, ...props }: FormControlProps) => {
     append({ trait_type: '', value: '' })
   }
   return (
-    <FormControl w='full' name={name} {...props}>
+    <FormControl w="full" name={name} {...props}>
       {({ name }) => (
-        <VStack w='full' align='start'>
+        <VStack w="full" align="start">
           {fields.map((item, index) => (
             <AttributeControl
               key={item.id}

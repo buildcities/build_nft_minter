@@ -19,9 +19,9 @@ type AssetDetailType = {
 
 const AssetDetail = ({ onClose }) => {
   const formMethods = useForm()
-  const [update, { loading, reset, error }] = useMutation(UPDATE_ASSET_MUTATION)
+  const [update, { loading }] = useMutation(UPDATE_ASSET_MUTATION)
   const { selectedAsset, setAsset } = useStore((s) => s)
-  const { assetLink, isDynamic, name, mediaType, id } = JSON.parse(
+  const { assetLink, name, mediaType, id } = JSON.parse(
     selectedAsset
   ) as AssetDetailType
 

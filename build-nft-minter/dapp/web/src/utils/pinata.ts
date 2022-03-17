@@ -5,7 +5,7 @@ export const pinJSONToIPFS = async (JSONBody: any) => {
   const pinataContent = JSONBody
   const pinataMetadata = { name: 'Build NFT Token' }
 
-  const result= await axios.post(
+  const result = await axios.post(
     url,
     { pinataMetadata, pinataContent },
     {

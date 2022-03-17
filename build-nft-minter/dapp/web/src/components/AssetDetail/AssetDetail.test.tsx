@@ -8,7 +8,7 @@ import AssetDetail from './AssetDetail'
 describe('AssetDetail', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<AssetDetail />)
+      render(<AssetDetail onClose={undefined} />)
     }).not.toThrow()
   })
 })

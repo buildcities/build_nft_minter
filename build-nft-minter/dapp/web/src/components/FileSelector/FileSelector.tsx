@@ -1,4 +1,4 @@
-import { Text, Center, Button, VStack, ButtonProps, Progress } from '@chakra-ui/react'
+import { Text, Center, Button, VStack, ButtonProps } from '@chakra-ui/react'
 import { AttachmentIcon } from '@chakra-ui/icons'
 const FileSelector: React.FC<ButtonProps> = ({ children, ...props }) => {
   return (
@@ -26,7 +26,6 @@ const FileSelector: React.FC<ButtonProps> = ({ children, ...props }) => {
         >
           Upload file
         </Button>
-
       </VStack>
     </Center>
   )

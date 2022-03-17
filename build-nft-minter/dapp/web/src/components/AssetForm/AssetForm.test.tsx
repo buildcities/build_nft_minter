@@ -8,7 +8,13 @@ import AssetForm from './AssetForm'
 describe('AssetForm', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<AssetForm />)
+      render(
+        <AssetForm
+          onClose={function (): void {
+            throw new Error('Function not implemented.')
+          }}
+        />
+      )
     }).not.toThrow()
   })
 })

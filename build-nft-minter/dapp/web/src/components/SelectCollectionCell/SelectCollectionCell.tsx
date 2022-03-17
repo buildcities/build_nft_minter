@@ -26,9 +26,7 @@ export const Success = ({
   }
   return (
     <VStack align={'start'} w="full">
-      <SelectField
-        {...pick(props, ['name', 'onChange', 'value'])}
-      >
+      <SelectField {...pick(props, ['name', 'onChange', 'value'])}>
         <option value="">Rarible collection</option>
         {collections.map((item) => {
           return (

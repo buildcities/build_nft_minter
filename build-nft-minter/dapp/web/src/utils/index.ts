@@ -211,4 +211,3 @@ export const getActiveChain = (chainId: string) => {
       window.alert('Supported chains are rinkeby and mainnet!')
   }
 }
-

@@ -6,9 +6,7 @@ import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 import { init } from '../auth/moralis-client'
 import './index.css'
-import { Moralis } from 'moralis'
 import 'src/utils/firebase'
-import { useEffect } from 'react'
 import Web3Provider from './components/Web3Provider/Web3Provider'
 const client = init(process.env.MORALIS_SERVER_URL, process.env.MORALIS_API_ID)
 

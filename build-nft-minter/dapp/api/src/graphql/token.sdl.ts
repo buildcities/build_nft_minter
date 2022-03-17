@@ -9,7 +9,8 @@ export const schema = gql`
   }
 
   type Query {
-    tokens(owner: String!, chain: String, tokenContract: String): [Token!] @skipAuth
+    tokens(owner: String!, chain: String, tokenContract: String): [Token!]
+      @skipAuth
     collectionTokens(collectionId: String!, chain: String!): [Token!] @skipAuth
   }
 

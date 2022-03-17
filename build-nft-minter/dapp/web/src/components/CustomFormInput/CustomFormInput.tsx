@@ -1,5 +1,4 @@
-
-import { useFormContext, Controller, ControllerProps } from 'react-hook-form'
+import { useFormContext, Controller } from 'react-hook-form'
 import FormControl, { FormControlProps } from '../FormControl/FormControl'
 
 interface CustomFormInputProp extends FormControlProps {

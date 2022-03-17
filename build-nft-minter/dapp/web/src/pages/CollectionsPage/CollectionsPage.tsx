@@ -1,10 +1,8 @@
 import {
-  Avatar,
   Box,
   Center,
   Heading,
   useDisclosure,
-  Icon,
   LinkOverlay,
 } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
@@ -15,10 +13,9 @@ import SideDrawer from 'src/components/SideDrawer/SideDrawer'
 import CollectionList from 'src/components/CollectionsCell'
 import { collectionFormInputs } from 'src/types'
 import { createCollection } from 'src/utils'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useApolloClient } from '@apollo/client'
 import { useStore } from 'src/utils/stores/ui'
-import { first } from 'lodash'
 
 const HEADER = 'Mint a token'
 

@@ -1,4 +1,4 @@
-import { render, screen } from '@redwoodjs/testing/web'
+import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './SelectAssetsCell'
 import { standard } from './SelectAssetsCell.mock'
 
@@ -35,7 +35,7 @@ describe('SelectAssetsCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success selectAssets={standard().selectAssets} />)
+      render(<Success assets={standard().assets} />)
     }).not.toThrow()
   })
 })

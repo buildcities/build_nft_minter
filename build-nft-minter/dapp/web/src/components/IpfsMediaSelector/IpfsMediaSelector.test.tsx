@@ -8,7 +8,7 @@ import IpfsMediaSelector from './IpfsMediaSelector'
 describe('IpfsMediaSelector', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<IpfsMediaSelector />)
+      render(<IpfsMediaSelector name={''} />)
     }).not.toThrow()
   })
 })

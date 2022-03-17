@@ -1,14 +1,11 @@
-import { navigate, routes } from '@redwoodjs/router'
-import {Moralis} from 'moralis'
+import { Moralis } from 'moralis'
 import { useEffect } from 'react'
-import { getActiveChain, getWeb3Client } from 'src/utils'
 import { useStore } from 'src/utils/stores/ui'
 import { useAuth } from '@redwoodjs/auth'
-import { getCurrentUser, isAuthenticated } from '../../../../api/src/lib/auth'
 
 const Web3Provider: React.FC = ({ children }) => {
   const { setAccount, setChain } = useStore((s) => s)
-  const { userMetadata,isAuthenticated } = useAuth()
+  const { userMetadata, isAuthenticated } = useAuth()
   const handleChainChanged = async (chainId) => {
     console.log(chainId)
     setChain(chainId)
@@ -19,7 +16,6 @@ const Web3Provider: React.FC = ({ children }) => {
     setAccount(accounts[0])
   }
   useEffect(() => {
-
     if (isAuthenticated) {
       const provider = (window as any).ethereum || Moralis.provider
       if (provider) {

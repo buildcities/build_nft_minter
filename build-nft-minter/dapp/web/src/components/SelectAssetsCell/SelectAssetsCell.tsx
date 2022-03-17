@@ -25,7 +25,7 @@ export const Empty = () => (
   </Button>
 )
 
-export const Failure = ({ error,refetch }: CellFailureProps) => (
+export const Failure = ({ error, refetch }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 

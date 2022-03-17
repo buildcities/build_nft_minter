@@ -5,12 +5,11 @@ import {
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
-import { HiddenField, useForm, useWatch } from '@redwoodjs/forms'
+import { useForm, useWatch } from '@redwoodjs/forms'
 import React, { useEffect, useState } from 'react'
 import FormControl from 'src/components/FormControl/FormControl'
 import TextField from 'src/components/TextInputField/TextInputField'
 import SelectField from 'src/components/SelectInputField/SelectInputField'
-import TextAreaField from 'src/components/TextAreaField/TextAreaField'
 import { Form } from '@redwoodjs/forms'
 import SubmitFormButton from '../SubmitFormButton/SubmitFormButton'
 import SelectAssetsCell from 'src/components/SelectAssetsCell'

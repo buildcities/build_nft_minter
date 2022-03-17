@@ -1,8 +1,4 @@
-import {
-  Box,
-  useColorModeValue,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, useColorModeValue, VStack } from '@chakra-ui/react'
 import React from 'react'
 import FormControl from 'src/components/FormControl/FormControl'
 import TextField from 'src/components/TextInputField/TextInputField'
@@ -13,7 +9,6 @@ const CollectionForm: React.FC<{
   onSubmit?: (payload: Record<string, unknown>) => void
   isBusy?: boolean
 }> = ({ onSubmit, isBusy }) => {
-
   return (
     <Box
       bg={useColorModeValue('white', 'gray.700')}

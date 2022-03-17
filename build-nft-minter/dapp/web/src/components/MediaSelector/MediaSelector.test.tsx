@@ -8,7 +8,7 @@ import MediaSelector from './MediaSelector'
 describe('MediaSelector', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<MediaSelector  name='nice-name' />)
+      render(<MediaSelector name="nice-name" />)
     }).not.toThrow()
   })
 })

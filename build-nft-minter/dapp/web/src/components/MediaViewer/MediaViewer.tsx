@@ -22,7 +22,14 @@ const MediaViewer = ({
   videoProps,
 }: MediaViewerProps) => {
   return isVideo ? (
-    <Video controls url={src} height={height} width={width} src={src} {...videoProps} />
+    <Video
+      controls
+      url={src}
+      height={height}
+      width={width}
+      src={src}
+      {...videoProps}
+    />
   ) : (
     src && (
       <ImageViewer

@@ -1,11 +1,9 @@
 import FileSelector from 'src/components/FileSelector/FileSelector'
 import MediaViewer from 'src/components/MediaViewer/MediaViewer'
-import { getStorage } from 'firebase/storage'
 import { useEffect, useState } from 'react'
-import { Box, Button, Center, Progress, VStack } from '@chakra-ui/react'
+import { Box, Button, Center, VStack } from '@chakra-ui/react'
 import { EditIcon } from '@chakra-ui/icons'
 import { useFilePicker } from 'use-file-picker'
-import useAxiosUploader from 'src/utils/hooks/use-axios-uploader'
 import Moralis from 'moralis'
 import { isVideo } from 'src/utils'
 
@@ -21,7 +19,6 @@ type IpfsMediaSelectorType = {
   onChange?: (value: any) => void
   onTypeChange?: (value: string) => void
 }
-
 
 const uploadImageToIpfs = async (file: File) => {
   const _file = new Moralis.File(file.name, file)
@@ -65,7 +62,12 @@ const IpfsMediaSelector = ({
       color="gray.300"
     >
       <VStack>
-        <MediaViewer isVideo={isVideo(src)} height={320} width={300} src={src} />
+        <MediaViewer
+          isVideo={isVideo(src)}
+          height={320}
+          width={300}
+          src={src}
+        />
         {/* {progress && (
           <Progress
             w="full"

@@ -1,12 +1,12 @@
 import { Box, Image, StyleProps } from '@chakra-ui/react'
 
-interface ImageViewerProps  extends StyleProps{
+interface ImageViewerProps extends StyleProps {
   src: string
   height: string | number
   width: string | number
 }
 
-const ImageViewer = ({ src,height,width }: ImageViewerProps) => {
+const ImageViewer = ({ src, height, width }: ImageViewerProps) => {
   return (
     <Box w="full">
       <Image
@@ -20,10 +20,9 @@ const ImageViewer = ({ src,height,width }: ImageViewerProps) => {
   )
 }
 
-ImageViewer.defaultProps=
-{
-  height:'230px',
-  width:'282px'
+ImageViewer.defaultProps = {
+  height: '230px',
+  width: '282px',
 }
 
 export default ImageViewer

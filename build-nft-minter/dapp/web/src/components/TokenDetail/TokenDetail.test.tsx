@@ -8,7 +8,7 @@ import TokenDetail from './TokenDetail'
 describe('TokenDetail', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<TokenDetail />)
+      render(<TokenDetail src={''} />)
     }).not.toThrow()
   })
 })

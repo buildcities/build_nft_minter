@@ -2,7 +2,6 @@ import type { AssetsQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import CardItem from '../CardItem/CardItem'
 import {
-  Badge,
   Box,
   Button,
   Center,

@@ -2,7 +2,6 @@ import type { Token, TokensQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import {
   Box,
-  Button,
   Center,
   Flex,
   Spinner,
@@ -96,7 +95,7 @@ export const Success: React.FC<SuccessProps> = ({ tokens, children }) => {
         onClose={onClose}
         {...props}
       >
-        <TokenDetail src={getTokenMeta(selectedToken)?.mediaLink}/>
+        <TokenDetail src={getTokenMeta(selectedToken)?.mediaLink} />
       </SideDrawer>
     </Flex>
   )

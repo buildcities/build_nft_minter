@@ -13,5 +13,4 @@ export const useStore = create<IStore>((set) => ({
         draft.selectedAsset = src
       })
     ),
-
 }))

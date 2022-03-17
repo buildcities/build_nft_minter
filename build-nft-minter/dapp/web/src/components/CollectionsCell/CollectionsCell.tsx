@@ -10,7 +10,6 @@ import {
   Text,
 } from '@chakra-ui/react'
 import CardItemButton from '../CardItemButton/CardItemButton'
-import { isEmpty } from 'lodash'
 import CardItem from '../CardItem/CardItem'
 import { GET_COLLECTIONS_QUERY } from 'src/utils/queries/collections'
 import { navigate, routes } from '@redwoodjs/router'

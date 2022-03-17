@@ -16,7 +16,7 @@ type MediaSelectorType = {
   name: string
   disabled?: boolean
   filename?: string | ((payload?: File) => string)
-  mediaType?:string
+  mediaType?: string
   onChange?: (value: any) => void
   onTypeChange?: (value: string) => void
 }
@@ -50,7 +50,7 @@ const MediaSelector = ({
   }, [fileURL])
 
   useEffect(() => {
-    if(fileType){
+    if (fileType) {
       onTypeChange && onTypeChange(fileType)
     }
   }, [fileType])
@@ -72,7 +72,7 @@ const MediaSelector = ({
     >
       <VStack>
         <MediaViewer
-          isVideo={isVideo(fileType||mediaType)}
+          isVideo={isVideo(fileType || mediaType)}
           height={320}
           width={300}
           src={src}

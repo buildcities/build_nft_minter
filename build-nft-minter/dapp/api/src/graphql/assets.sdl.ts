@@ -10,7 +10,7 @@ export const schema = gql`
   }
 
   type Query {
-    assets(walletAddress:String):[Asset!]! @skipAuth
+    assets(walletAddress: String): [Asset!]! @skipAuth
   }
 
   input CreateAssetInput {

@@ -1,5 +1,5 @@
 import { createIcon } from '@chakra-ui/icons'
-import { Box, ComponentWithAs, IconProps } from '@chakra-ui/react'
+import { ComponentWithAs, IconProps } from '@chakra-ui/react'
 
 interface IconType extends ComponentWithAs<'svg', IconProps> {
   height: number
