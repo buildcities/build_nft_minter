@@ -11,7 +11,27 @@ export const QUERY = GET_COLLECTIONS_QUERY
 
 export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => <div>Empty</div>
+export const Empty = (props) => {
+  const onClick = () => {
+    navigate(routes.collections())
+  }
+  return (
+    <VStack align={'start'} w="full">
+      <SelectField validation={{ required: true }} {...pick(props, ['name', 'onChange', 'value'])}>
+        <option value="">Rarible collection</option>
+      </SelectField>
+      <Button
+        onClick={onClick}
+        rounded={'full'}
+        size="xs"
+        leftIcon={<AddIcon />}
+        colorScheme={'green'}
+      >
+        Create new asset
+      </Button>
+    </VStack>
+  )
+}
 
 export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>

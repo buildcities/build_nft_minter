@@ -106,6 +106,7 @@ const MinterForm: React.FC<{
               >
                 {({ onChange, value }) => (
                   <Switch
+                    _focus={{ boxShadow: 'none' }}
                     colorScheme={'green'}
                     isChecked={value}
                     onChange={onChange}
@@ -118,6 +119,8 @@ const MinterForm: React.FC<{
               <FormControl label="List for sale" name="forSale">
                 {() => (
                   <Switch
+                    colorScheme={'green'}
+                    _focus={{ boxShadow: 'none' }}
                     isChecked={showPrice}
                     onChange={onChangePrice}
                     size="lg"

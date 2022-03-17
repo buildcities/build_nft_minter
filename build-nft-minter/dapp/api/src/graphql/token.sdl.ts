@@ -6,6 +6,14 @@ export const schema = gql`
     assetLink: String
     mediaLink: String
     mediaType: String
+    tokenId: String
+    contractAddress: String
+    owner: String
+    attributes: JSON
+    blockNumber: String
+    contractType: String
+    symbol: String
+    tokenName: String
   }
 
   type Query {

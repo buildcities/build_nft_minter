@@ -14,18 +14,9 @@ import CardItemButton from '../CardItemButton/CardItemButton'
 import SideDrawer from '../SideDrawer/SideDrawer'
 import TokenDetail from 'src/components/TokenDetail/TokenDetail'
 import { useStore } from 'src/utils/stores/token'
+import { GET_TOKENS_QUERY } from 'src/utils/queries/tokens'
 
-export const QUERY = gql`
-  query TokensQuery($owner: String!, $chain: String) {
-    tokens(owner: $owner, chain: $chain) {
-      id
-      name
-      description
-      assetLink
-      mediaLink
-    }
-  }
-`
+export const QUERY =GET_TOKENS_QUERY
 
 export const Loading = () => (
   <Box>
@@ -95,7 +86,7 @@ export const Success: React.FC<SuccessProps> = ({ tokens, children }) => {
         onClose={onClose}
         {...props}
       >
-        <TokenDetail src={getTokenMeta(selectedToken)?.mediaLink} />
+        <TokenDetail {...getTokenMeta(selectedToken)} />
       </SideDrawer>
     </Flex>
   )

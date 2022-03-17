@@ -8,8 +8,9 @@ import {
   useBreakpointValue,
   useDisclosure,
   Heading,
+  useColorMode,
 } from '@chakra-ui/react'
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
+import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons'
 import DesktopNav from 'src/components/DesktopNav/DesktopNav'
 import MobileNav from 'src/components/MobileNav/MobileNav'
 import LogoutButton from 'src/components/LogoutButton/LogoutButton'
@@ -17,6 +18,7 @@ import { NAV_ITEMS } from './presets'
 
 const Header = () => {
   const { isOpen, onToggle } = useDisclosure()
+  const { colorMode, toggleColorMode } = useColorMode()
   return (
     <Box>
       <Flex
@@ -66,6 +68,13 @@ const Header = () => {
           direction={'row'}
           spacing={6}
         >
+          <IconButton
+            w="fit-content"
+            _focus={{ boxShadow: 'none' }}
+            onClick={toggleColorMode}
+            aria-label="toggle color mode"
+            icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+          ></IconButton>
           <LogoutButton />
         </Stack>
       </Flex>

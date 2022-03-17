@@ -50,6 +50,7 @@ const prepareTokenResult = async (
     owner_of?: string
     metadata?: string
     mediaType?: string
+    block_number?: string
   }[]
 ) => {
   const prepareURI = (uri: string) => 'ipfs://' + uri.split('/').pop()
@@ -64,27 +65,55 @@ const prepareTokenResult = async (
     select: { metadataLink: true, mediaType: true },
   })
   const mappedMediaTypes = groupBy(mediaTypes, (item) => item.metadataLink)
+  console.log(result)
   return result
     .filter((item) => item?.metadata)
-    .map(({ metadata, token_address, token_id, token_uri }) => {
-      const _meta = JSON.parse(metadata) as metadataType
+    .map(
+      ({
+        metadata,
+        token_address,
+        token_id,
+        token_uri,
+        owner_of,
+        contract_type,
+        block_number,
+        symbol,
+        name:tokenName
+      }) => {
+        const _meta = JSON.parse(metadata) as metadataType
 
-      const mediaType = mappedMediaTypes[prepareURI(token_uri)]
-        ? mappedMediaTypes[prepareURI(token_uri)][0]?.mediaType
-        : ''
-      const { description, animation_url, image, external_url, name } = _meta
-      return {
-        id: token_address + token_id,
-        name,
-        description,
-        mediaType,
-        mediaLink: prepareMediaLink(mediaType, animation_url || image),
-        assetLink: prepareMediaLink(
+        const mediaType = mappedMediaTypes[prepareURI(token_uri)]
+          ? mappedMediaTypes[prepareURI(token_uri)][0]?.mediaType
+          : ''
+        const {
+          description,
+          animation_url,
+          image,
+          external_url,
+          name,
+          attributes,
+        } = _meta
+        return {
+          id: token_address + token_id,
+          name,
+          description,
           mediaType,
-          external_url || animation_url || image
-        ),
+          mediaLink: prepareMediaLink(mediaType, animation_url || image),
+          assetLink: prepareMediaLink(
+            mediaType,
+            external_url || animation_url || image
+          ),
+          contractAddress: token_address,
+          tokenId: token_id,
+          owner: owner_of,
+          blockNumber: block_number,
+          attributes,
+          contractType: contract_type,
+          symbol,
+          tokenName
+        }
       }
-    })
+    )
 }
 
 export const fetchOwnedTokens = async (

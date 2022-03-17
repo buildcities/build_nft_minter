@@ -4,18 +4,9 @@ import { Box, Center, Flex, Spinner, Text } from '@chakra-ui/react'
 import CardItem from '../CardItem/CardItem'
 import { isEmpty } from 'lodash'
 import CardItemButton from '../CardItemButton/CardItemButton'
+import { GET_COLLECTIONS_TOKEN_QUERY } from 'src/utils/queries/tokens'
 
-export const QUERY = gql`
-  query CollectTokensQuery($collectionId: String!, $chain: String!) {
-    collectionTokens(collectionId: $collectionId, chain: $chain) {
-      id
-      name
-      description
-      assetLink
-      mediaLink
-    }
-  }
-`
+export const QUERY = GET_COLLECTIONS_TOKEN_QUERY
 
 export const Loading = () => (
   <Box>

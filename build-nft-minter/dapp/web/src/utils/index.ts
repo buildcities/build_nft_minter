@@ -211,3 +211,27 @@ export const getActiveChain = (chainId: string) => {
       window.alert('Supported chains are rinkeby and mainnet!')
   }
 }
+
+export const marketPlaceByChain = (
+  chainId: string,
+  marketPlace: 'opensea' | 'rarible' | 'etherscan',
+  address: string,
+  tokenId: number | string
+) => {
+  switch (chainId) {
+    case '0x1':
+      return marketPlace == 'opensea'
+        ? `https://opensea.io/assets/${address}/${tokenId}`
+        : marketPlace=='rarible'
+        ? `https://rarible.com/token/${address}:${tokenId}`
+        : `https://etherscan.io/address/${address}`
+    case '0x4':
+      return marketPlace == 'opensea'
+        ? `https://testnets.opensea.io/assets/${address}/${tokenId}`
+        : marketPlace=='rarible'
+        ? `https://rinkeby.rarible.com/token/${address}:${tokenId}`
+        : `https://rinkeby.etherscan.io/address/${address}`
+    default:
+      window.alert('Supported chains are rinkeby and mainnet!')
+  }
+}

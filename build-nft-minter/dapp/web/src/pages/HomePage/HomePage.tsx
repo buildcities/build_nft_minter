@@ -1,8 +1,21 @@
-import { Box, Heading, Container, Text, Stack } from '@chakra-ui/react'
+import { MoonIcon, SunIcon } from '@chakra-ui/icons'
+import {
+  Box,
+  Heading,
+  Container,
+  Text,
+  Stack,
+  Slider,
+  HStack,
+  IconButton,
+  Switch,
+  useColorMode,
+} from '@chakra-ui/react'
 import AuthButton from 'src/components/AuthButton/AuthButton'
 
 import { MAIN_TEXT_2, SUB_TEXT } from './presets'
 export default function HomePage() {
+  const { colorMode, toggleColorMode } = useColorMode()
   return (
     <>
       <Container maxW={'3xl'}>
@@ -31,6 +44,16 @@ export default function HomePage() {
             position={'relative'}
           >
             <AuthButton />
+            <HStack>
+              <MoonIcon />
+              <Switch
+                isChecked={colorMode === 'light'}
+                onChange={toggleColorMode}
+                _focus={{ boxShadow: 'none' }}
+                colorScheme={'green'}
+              />
+              <SunIcon />
+            </HStack>
           </Stack>
         </Stack>
       </Container>
