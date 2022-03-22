@@ -22,6 +22,24 @@ type metadataType = {
   image: string
 }
 
+type tokenResultType = {
+  id?: string
+  name?: string
+  description?: string
+  mediaType?: string
+  mediaLink?: string
+  assetLink?: string
+  contractAddress?: string
+  tokenId?: string
+  owner?: string
+  blockNumber?: string
+  attributes?: { trait_type: string; value: string }[]
+  contractType?: string
+  symbol?: string
+  tokenName?: string
+  amount?: string
+}
+
 export const initMoralis = async () => {
   return await Moralis.start({
     serverUrl: process.env.MORALIS_SERVER_URL,
@@ -58,7 +76,7 @@ const prepareTokenResult = async (
     mediaType?: string
     block_number?: string
   }[]
-) => {
+): Promise<tokenResultType[]> => {
   const cleanData = result.filter((item) => item?.metadata && item?.token_uri)
 
   const groups = groupBy(cleanData, (item) => prepareURI(item.token_uri))
@@ -80,6 +98,7 @@ const prepareTokenResult = async (
       block_number,
       symbol,
       name: tokenName,
+      amount
     }) => {
       const _meta = JSON.parse(metadata) as metadataType
 
@@ -112,9 +131,18 @@ const prepareTokenResult = async (
         contractType: contract_type,
         symbol,
         tokenName,
+        amount
       }
     }
   )
+}
+
+const groupByUniqueTokens = (payload: tokenResultType[], amount?: number) => {
+  const grouped = groupBy(payload, (item) => item.name)
+  return Object.values(grouped).map((item) => ({
+    ...item[0],
+    ...{ amount: item.length || 0 },
+  }))
 }
 
 export const fetchOwnedTokens = async (
@@ -134,7 +162,7 @@ export const fetchOwnedTokens = async (
         address: owner,
       })
   //console.log(data.result)
-  return prepareTokenResult(data?.result)
+  return groupByUniqueTokens(await prepareTokenResult(data?.result))
 }
 
 const prepareCollectionResult = (
@@ -167,7 +195,7 @@ export const fetchCollectionTokens = async (
     select: { mediaType: true },
   })
   //console.log(_data)
-  return prepareTokenResult(data.result)
+  return groupByUniqueTokens(await prepareTokenResult(data.result))
 }
 
 export const fetchOwnedCollections = async (owner: string, chain?: string) => {

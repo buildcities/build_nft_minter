@@ -15,6 +15,7 @@ export const GET_TOKENS_QUERY = gql`
       contractType
       symbol
       tokenName
+      amount
     }
   }
 `
@@ -26,6 +27,15 @@ export const GET_COLLECTIONS_TOKEN_QUERY = gql`
       description
       assetLink
       mediaLink
+      blockNumber
+      attributes
+      owner
+      tokenId
+      contractAddress
+      contractType
+      symbol
+      tokenName
+      amount
     }
   }
 `

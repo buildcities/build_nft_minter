@@ -35,13 +35,12 @@ export default function CardItem({
 }: CardItemProps) {
   return (
     <LinkBox>
-      <Center py={0}>
+      <Center maxW='full' py={0}>
         <Box
           role={'group'}
           p={6}
-          maxW={'330px'}
-          w={'full'}
-          bg={useColorModeValue('white', 'gray.800')}
+          w={'330px'}
+          bg={useColorModeValue('white', 'gray.700')}
           boxShadow={'2xl'}
           rounded={'lg'}
         >
@@ -64,7 +63,7 @@ export default function CardItem({
           <Stack pt={5} justify="center" w="full" align={'center'}>
             {children}
             <Text
-              color={'gray.500'}
+              color={useColorModeValue('gray.500', 'white')}
               maxW={200}
               isTruncated
               textAlign="center"

@@ -166,6 +166,8 @@ export const mintNFT = async (data: formInputs) => {
   if (!isEmpty(data.collection)) {
     return await mintCustom(data)
   }
+
+  
   // getWeb3Client()
   // const metaData = await prepareMetaData(data)
   // const tokenURI = (await pinJSONToIPFS(metaData)) as { IpfsHash: string }

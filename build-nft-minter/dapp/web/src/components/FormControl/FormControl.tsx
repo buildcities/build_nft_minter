@@ -1,4 +1,4 @@
-import { VStack, Text, chakra, StyleProps, Box } from '@chakra-ui/react'
+import { VStack, Text, chakra, StyleProps, Box,useColorModeValue } from '@chakra-ui/react'
 import { Label, FieldError as _FieldError } from '@redwoodjs/forms'
 const FieldError = chakra(_FieldError)
 interface FormControlChild extends StyleProps {
@@ -31,7 +31,7 @@ const FormControl = ({
           {label}
         </_Label>
         {description && (
-          <Text fontSize="sm" color="gray.600">
+          <Text fontSize="sm" color={useColorModeValue("gray.600","white")}>
             {description}
           </Text>
         )}

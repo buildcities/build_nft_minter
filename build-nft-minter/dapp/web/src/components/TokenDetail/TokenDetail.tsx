@@ -18,6 +18,7 @@ import TokenDetailInfo from '../TokenDetailInfo/TokenDetailInfo'
 interface TokenDetailType extends Token {}
 
 const TokenDetail = (props: TokenDetailType) => {
+  console.log(props)
   const { chain, account } = useStore((s) => s)
   return (
     <Box

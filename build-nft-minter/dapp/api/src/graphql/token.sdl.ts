@@ -14,6 +14,7 @@ export const schema = gql`
     contractType: String
     symbol: String
     tokenName: String
+    amount: String
   }
 
   type Query {

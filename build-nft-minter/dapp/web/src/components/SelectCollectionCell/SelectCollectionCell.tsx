@@ -17,7 +17,7 @@ export const Empty = (props) => {
   }
   return (
     <VStack align={'start'} w="full">
-      <SelectField validation={{ required: true }} {...pick(props, ['name', 'onChange', 'value'])}>
+      <SelectField {...pick(props, ['name', 'onChange', 'value'])}>
         <option value="">Rarible collection</option>
       </SelectField>
       <Button

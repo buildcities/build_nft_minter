@@ -7,18 +7,16 @@ contract DynamintBeaconProxy is AccessControl, UpgradeableBeacon {
     //UpgradeableBeacon immutable beacon;
 
     address public bluePrint;
-    bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant OWNER_ROLE = keccak256("OWNER_ROLE");
 
     constructor(address _implementation) UpgradeableBeacon(_implementation) {
         //beacon = new UpgradeableBeacon(_implementation);
         bluePrint = _implementation;
         _grantRole(DEFAULT_ADMIN_ROLE, tx.origin);
-        _grantRole(PAUSER_ROLE, tx.origin);
-        _grantRole(MINTER_ROLE, tx.origin);
+        _grantRole(OWNER_ROLE, tx.origin);
     }
 
-    function update(address _newImpl) public {
+    function update(address _newImpl) public onlyRole(OWNER_ROLE) {
         upgradeTo(_newImpl);
         bluePrint = _newImpl;
     }

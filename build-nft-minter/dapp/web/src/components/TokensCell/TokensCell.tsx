@@ -9,7 +9,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import CardItem from '../CardItem/CardItem'
-import { isEmpty } from 'lodash'
+import { groupBy, isEmpty } from 'lodash'
 import CardItemButton from '../CardItemButton/CardItemButton'
 import SideDrawer from '../SideDrawer/SideDrawer'
 import TokenDetail from 'src/components/TokenDetail/TokenDetail'
@@ -69,9 +69,10 @@ export const Success: React.FC<SuccessProps> = ({ tokens, children }) => {
         .filter((x) => !isEmpty(x.mediaLink))
         .map((item, index) => {
           const isVideo = item?.mediaLink?.includes('.mp4')
+          const description =`${item?.description} (${item.amount})`
           return (
             <CardItem
-              subTitle={item?.description || 'UnNamed Token'}
+              subTitle={description}
               title={item.name || 'Untitled'}
               key={`${item.id}${index}`}
               src={item.mediaLink || ''}

@@ -59,7 +59,7 @@ const MinterForm: React.FC<{
             label="Assets"
             name="asset"
           >
-            {(props) => <SelectAssetsCell {...props} />}
+            {(props) => <SelectAssetsCell  walletAddress={account} {...props} />}
           </FormControl>
           <FormControl
             description="Group your assets in a unique collection"
