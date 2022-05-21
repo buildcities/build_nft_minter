@@ -1,6 +1,6 @@
 import { Moralis } from 'moralis'
 import { collectionFormInputs, formInputs } from 'src/types'
-import { isEmpty } from 'lodash'
+import { capitalize, groupBy, isEmpty, keys, omit, random } from 'lodash'
 import { navigate, routes } from '@redwoodjs/router'
 import { collectionAbi } from './abi/collection'
 import { tokenAbi } from './abi/token'
@@ -167,7 +167,6 @@ export const mintNFT = async (data: formInputs) => {
     return await mintCustom(data)
   }
 
-  
   // getWeb3Client()
   // const metaData = await prepareMetaData(data)
   // const tokenURI = (await pinJSONToIPFS(metaData)) as { IpfsHash: string }
@@ -224,16 +223,74 @@ export const marketPlaceByChain = (
     case '0x1':
       return marketPlace == 'opensea'
         ? `https://opensea.io/assets/${address}/${tokenId}`
-        : marketPlace=='rarible'
+        : marketPlace == 'rarible'
         ? `https://rarible.com/token/${address}:${tokenId}`
         : `https://etherscan.io/address/${address}`
     case '0x4':
       return marketPlace == 'opensea'
         ? `https://testnets.opensea.io/assets/${address}/${tokenId}`
-        : marketPlace=='rarible'
+        : marketPlace == 'rarible'
         ? `https://rinkeby.rarible.com/token/${address}:${tokenId}`
         : `https://rinkeby.etherscan.io/address/${address}`
     default:
       window.alert('Supported chains are rinkeby and mainnet!')
   }
+}
+
+export const prepareTraitsFromFile = (e) => {
+  const allTraits = []
+  for (var i = 0, f; (f = e.target.files[i]); ++i) {
+    const file = f
+    const parts = file.webkitRelativePath.split('/')
+    const traitParts = parts[parts.length - 1].split('.')
+    if (traitParts[1] && traitParts[1] == 'png') {
+      const layer = parts[parts.length - 2]
+      const trait = capitalize(parts[parts.length - 1].split('.')[0])
+      const rarity = 3
+      const id = `${layer}-${trait}`
+      allTraits.push({ file, layer, trait, rarity, id })
+    }
+  }
+  const grouped = groupBy(allTraits, (item) => item.layer)
+  //console.log(grouped)
+  const result = keys(grouped).map((item) => {
+    const id = item
+    const traits = grouped[item].map((item) => {
+      return omit(item, ['layer'])
+    })
+    return { id, traits }
+  })
+  return result
+}
+
+const getIds = (fields: Record<'id', string>[]) => {
+  //console.log(fields)
+  return fields.map((field: { id: string; traits: [{ id: string }] }) => {
+    const pos = random(0, field.traits.length - 1)
+    return field.traits[pos].id
+  })
+}
+
+export const drawImages = (
+  fields: Record<'id', string>[],
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  bgrdColor: string
+) => {
+  const ids = getIds(fields)
+  ctx.fillStyle = bgrdColor
+  ctx.fillRect(x, y, width, height)
+
+  // console.log(ids)
+  ids?.length &&
+    ids.forEach((id) => {
+      const image = document.getElementById(id) as CanvasImageSource
+      //console.log(image)
+      if (image) {
+        ctx.drawImage(image, x, y, width, height)
+      }
+    })
 }

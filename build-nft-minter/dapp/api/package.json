@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@redwoodjs/api": "v0.44.1",
-    "@redwoodjs/graphql-server": "v0.44.1",
+    "@redwoodjs/api": "^1.4.0",
+    "@redwoodjs/graphql-server": "^1.4.0",
     "@supabase/supabase-js": "^1.30.0",
     "axios": "^0.26.0",
     "cloudinary": "^1.28.1",

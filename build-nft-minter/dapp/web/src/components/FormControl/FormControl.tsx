@@ -27,9 +27,9 @@ const FormControl = ({
   return (
     <VStack w="full" align="start" spacing={2}>
       <Box>
-        <_Label fontSize={'sm'} fontWeight="bold" name={name}>
+        {label &&<_Label fontSize={'sm'} fontWeight="bold" name={name}>
           {label}
-        </_Label>
+        </_Label>}
         {description && (
           <Text fontSize="sm" color={useColorModeValue("gray.600","white")}>
             {description}

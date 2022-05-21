@@ -1,7 +1,8 @@
 import { useFormContext, Controller } from 'react-hook-form'
 import FormControl, { FormControlProps } from '../FormControl/FormControl'
 
-interface CustomFormInputProp extends FormControlProps {
+export interface CustomFormInputProp extends FormControlProps {
+  
   children?: (payload: any) => React.ReactElement
 }
 

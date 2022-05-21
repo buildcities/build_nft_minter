@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import TokenDetail from './TokenDetail'
+import AppButton from './AppButton'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('TokenDetail', () => {
+describe('AppButton', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<TokenDetail id={''} />)
+      render(<AppButton />)
     }).not.toThrow()
   })
 })

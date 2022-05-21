@@ -16,10 +16,15 @@ module.exports = (config, { mode }) => {
     assert: require.resolve(`assert/`),
     crypto: require.resolve(`crypto-browserify`),
     path: require.resolve('path-browserify'),
+    zlib: require.resolve('browserify-zlib'),
+    tls: false,
+    fs: false,
+    net: false,
+    child_process: false,
   }
   config.plugins.push(
     new webpack.ProvidePlugin({
-      process: 'process/browser',
+      process: 'process/browser.js',
       Buffer: ['buffer', 'Buffer'],
     })
   )

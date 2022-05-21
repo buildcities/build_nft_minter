@@ -8,7 +8,7 @@ import TokenDetailInfo from './TokenDetailInfo'
 describe('TokenDetailInfo', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<TokenDetailInfo />)
+      render(<TokenDetailInfo id="testid" />)
     }).not.toThrow()
   })
 })

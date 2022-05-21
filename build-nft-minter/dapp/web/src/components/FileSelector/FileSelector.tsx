@@ -1,6 +1,17 @@
 import { Text, Center, Button, VStack, ButtonProps } from '@chakra-ui/react'
 import { AttachmentIcon } from '@chakra-ui/icons'
-const FileSelector: React.FC<ButtonProps> = ({ children, ...props }) => {
+
+interface FileSelectorProps extends ButtonProps {
+  description?: string
+  buttonText?: string
+}
+
+const FileSelector: React.FC<FileSelectorProps> = ({
+  children,
+  description,
+  buttonText,
+  ...props
+}) => {
   return (
     <Center
       color={'gray.400'}
@@ -12,7 +23,7 @@ const FileSelector: React.FC<ButtonProps> = ({ children, ...props }) => {
     >
       <VStack>
         {children}
-        <Text>PNG, GIF, WEBP, MP4 or MP3. Max 100mb.</Text>
+        <Text>{description || 'PNG, GIF, WEBP, MP4 or MP3. Max 100mb.'}</Text>
         <Button
           size={'sm'}
           colorScheme={'green'}
@@ -24,7 +35,7 @@ const FileSelector: React.FC<ButtonProps> = ({ children, ...props }) => {
           leftIcon={<AttachmentIcon />}
           {...props}
         >
-          Upload file
+          {buttonText || 'Upload file'}
         </Button>
       </VStack>
     </Center>

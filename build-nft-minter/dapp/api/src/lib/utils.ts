@@ -1,7 +1,7 @@
 import Moralis from 'moralis/node'
 import { collectionAbi } from './abi/collection'
 import { db } from '../lib/db'
-import { groupBy } from 'lodash'
+import { capitalize, groupBy, keys, omit } from 'lodash'
 //this is to allow me merge with main branch
 type extendedNativeRunContractType = {
   runContractFunction: (options: {
@@ -81,12 +81,17 @@ const prepareTokenResult = async (
 
   const groups = groupBy(cleanData, (item) => prepareURI(item.token_uri))
 
+  //console.log(groups)
+
   const mediaTypes = await db.asset.findMany({
     where: { metadataLink: { in: Object.keys(groups) } },
     select: { metadataLink: true, mediaType: true },
   })
-  const mappedMediaTypes = groupBy(mediaTypes, (item) => item.metadataLink)
 
+  //console.log(mediaTypes)
+
+  const mappedMediaTypes = groupBy(mediaTypes, (item) => item.metadataLink)
+  //console.log(mappedMediaTypes)
   return cleanData.map(
     ({
       metadata,
@@ -98,7 +103,7 @@ const prepareTokenResult = async (
       block_number,
       symbol,
       name: tokenName,
-      amount
+      amount,
     }) => {
       const _meta = JSON.parse(metadata) as metadataType
 
@@ -131,7 +136,7 @@ const prepareTokenResult = async (
         contractType: contract_type,
         symbol,
         tokenName,
-        amount
+        amount,
       }
     }
   )
@@ -161,6 +166,7 @@ export const fetchOwnedTokens = async (
         chain: chain as unknown as any,
         address: owner,
       })
+  //console.log(data.result)
   //console.log(data.result)
   return groupByUniqueTokens(await prepareTokenResult(data?.result))
 }
@@ -194,7 +200,7 @@ export const fetchCollectionTokens = async (
     },
     select: { mediaType: true },
   })
-  //console.log(_data)
+  console.log(data)
   return groupByUniqueTokens(await prepareTokenResult(data.result))
 }
 
@@ -226,3 +232,4 @@ export const fetchCollections = async (chain?: string) => {
   //console.log(result)
   return prepareCollectionResult(result as unknown as [])
 }
+

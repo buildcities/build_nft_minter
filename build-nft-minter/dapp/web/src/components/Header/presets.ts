@@ -2,7 +2,7 @@ import { NavItem } from '../../types'
 import { routes } from '@redwoodjs/router'
 export const NAV_ITEMS: () => Array<NavItem> = () => [
   {
-    label: 'Tokens',
+    label: 'NFTs',
     href: routes.tokens(),
   },
   {

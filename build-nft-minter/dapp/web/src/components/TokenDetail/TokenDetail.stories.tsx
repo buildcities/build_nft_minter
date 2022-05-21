@@ -1,7 +1,7 @@
 import TokenDetail from './TokenDetail'
 
 export const generated = () => {
-  return <TokenDetail src={''} />
+  return <TokenDetail id="" />
 }
 
 export default { title: 'Components/TokenDetail' }

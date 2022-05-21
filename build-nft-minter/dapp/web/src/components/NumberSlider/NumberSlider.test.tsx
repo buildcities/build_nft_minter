@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import TokenDetail from './TokenDetail'
+import NumberSlider from './NumberSlider'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('TokenDetail', () => {
+describe('NumberSlider', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<TokenDetail id={''} />)
+      render(<NumberSlider />)
     }).not.toThrow()
   })
 })

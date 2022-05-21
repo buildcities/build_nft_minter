@@ -1,7 +1,7 @@
 import TokenDetailInfo from './TokenDetailInfo'
 
 export const generated = () => {
-  return <TokenDetailInfo />
+  return <TokenDetailInfo id="" />
 }
 
 export default { title: 'Components/TokenDetailInfo' }
