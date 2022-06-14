@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Box, Button, Center, Progress, VStack } from '@chakra-ui/react'
 import { EditIcon } from '@chakra-ui/icons'
 import { isVideo } from 'src/utils'
+import UploaderStatus from '../UploaderStatus/UploaderStatus'
 
 const STORAGE_BASEURL = 'https://firebasestorage.googleapis.com'
 const TRANSFORM_BASEURL = 'https://ik.imagekit.io/upsd36tz3ybq/minty'
@@ -77,15 +78,7 @@ const MediaSelector = ({
           width={300}
           src={src}
         />
-        {progress && (
-          <Progress
-            w="full"
-            size="xs"
-            colorScheme={'green'}
-            hasStripe
-            value={progress}
-          />
-        )}
+        {progress && <UploaderStatus value={progress} />}
         <Button
           size={'sm'}
           isLoading={uploading}
@@ -115,15 +108,7 @@ const MediaSelector = ({
         isLoading={uploading}
         onClick={handleFileClick}
       >
-        {progress && (
-          <Progress
-            w="full"
-            size="xs"
-            colorScheme={'green'}
-            hasStripe
-            value={progress}
-          />
-        )}
+        {progress && <UploaderStatus value={progress} />}
       </FileSelector>
       <FileUploaderUI
         hidden

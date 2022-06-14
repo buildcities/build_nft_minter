@@ -9,7 +9,7 @@ const logout = async () => {
   return await Moralis.User.logOut()
 }
 
-const getToken =  async () => {
+const getToken = async () => {
   return Moralis.User.current().getSessionToken()
 }
 
@@ -21,4 +21,3 @@ export const init = (serverUrl: string, appId: string) => {
   Moralis.start({ serverUrl, appId })
   return { login, logout, getToken, getUserMetadata }
 }
-

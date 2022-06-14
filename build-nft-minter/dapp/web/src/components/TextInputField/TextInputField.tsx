@@ -10,8 +10,8 @@ const TextInputField = (props) => {
     <TextField
       py={2}
       px={5}
-      borderRadius={'full'}
-      border="2px"
+      borderRadius={'lg'}
+      border="1px"
       borderColor={'gray.300'}
       w="full"
       {...props}

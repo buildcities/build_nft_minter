@@ -35,3 +35,19 @@ export type Web3ProviderContextType = {
   chain?: string
   account?: string
 }
+
+type AssetFormInput = {
+  assetType?: 'generative' | 'single' | 'multiple'
+  description?: string
+  name: string
+  storageType: 'ipfs' | 'arweave'
+}
+
+export interface IGenerativeInputType extends AssetFormInput {
+  isUnique: boolean
+  size: number
+  layers: {
+    id: string
+    traits: { file: File; id: string; rarity: number; trait: string }[]
+  }[]
+}

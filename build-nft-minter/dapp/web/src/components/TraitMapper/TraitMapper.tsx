@@ -5,6 +5,16 @@ import { useFormContext, useFieldArray } from '@redwoodjs/forms'
 import FormControl from 'src/components/FormControl/FormControl'
 import EditableText from '../EditableText/EditableText'
 import TraitMapperImageViewer from '../TraitMapperImageViewer/TraitMapperImageViewer'
+import { useUploadFile } from 'react-firebase-hooks/storage'
+import { getStorage, ref } from 'firebase/storage'
+import config from 'src/utils/firebase/api'
+import { useEffect, useState } from 'react'
+import { subscribe, unsubscribe } from 'pubsub-js'
+import UploaderStatus from '../UploaderStatus/UploaderStatus'
+import { useStore } from 'src/utils/stores/ui'
+
+
+const TOPIC = 'UPLOAD-FILES'
 
 type TraitItemProps = {
   name: string
@@ -17,6 +27,31 @@ const TraitItem = ({ name, onRemove, index }: TraitItemProps) => {
   const _onRemove = () => {
     onRemove && onRemove(index)
   }
+  // const storageRef = ref(
+  //   storage,
+  //   `${STORAGE_PATH}${getValues(`${name}.${index}.trait`)}.png`
+  // )
+
+  //const { setTraits } = useStore((s) => s)
+
+  // const [status, setStatus] = useState(null)
+  // const [progress, setProgress] = useState(0)
+
+  // useEffect(() => {
+  //   //const subscription = subscribe(TOPIC, manageUpload)
+
+  //   return () => {
+  //     //unsubscribe(subscription)
+  //   }
+  // }, [])
+
+  // useEffect(() => {
+  //   if (snapshot) {
+  //     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+  //     setProgress(progress)
+  //     setStatus(snapshot.state)
+  //   }
+  // }, [snapshot?.bytesTransferred, snapshot?.state])
 
   return (
     <VStack
@@ -30,6 +65,7 @@ const TraitItem = ({ name, onRemove, index }: TraitItemProps) => {
       <HStack w="full" spacing={2} align={'center'} justify={'center'}>
         <TraitMapperImageViewer
           id={getValues(`${name}.${index}.id`)}
+          w="full"
           file={getValues(`${name}.${index}.file`)}
         />
 
@@ -40,6 +76,7 @@ const TraitItem = ({ name, onRemove, index }: TraitItemProps) => {
           name={`${name}.${index}.rarity`}
         />
       </HStack>
+
       <HStack spacing={4} justify={'center'} align={'center'}>
         <EditableText
           w="full"

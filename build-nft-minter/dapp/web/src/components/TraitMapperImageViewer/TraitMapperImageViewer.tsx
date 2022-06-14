@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Image, ImageProps } from '@chakra-ui/react'
+import { Box, Image, ImageProps } from '@chakra-ui/react'
 
 interface TraitMapperImageViewerProps extends ImageProps {
   file: File
@@ -27,12 +27,14 @@ const TraitMapperImageViewer: React.FC<TraitMapperImageViewerProps> = ({
     }
   }, [file])
   return (
-    <Image
-      id={id}
-      boxSize={props.boxSize}
-      objectFit={props.objectFit}
-      src={imageSrc}
-    />
+    <Box padding={1} borderWidth={1} rounded="lg">
+      <Image
+        id={id}
+        boxSize={props.boxSize}
+        objectFit={props.objectFit}
+        src={imageSrc}
+      />
+    </Box>
   )
 }
 

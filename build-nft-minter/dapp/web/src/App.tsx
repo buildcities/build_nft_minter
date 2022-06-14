@@ -6,8 +6,10 @@ import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 import { init } from '../auth/moralis-client'
 import './index.css'
-import 'src/utils/firebase'
+import { CloudStorageProvider } from 'src/utils/firebase/provider'
 import Web3Provider from './components/Web3Provider/Web3Provider'
+import { theme } from './theme'
+
 const client = init(process.env.MORALIS_SERVER_URL, process.env.MORALIS_API_ID)
 
 const App = () => {
@@ -17,10 +19,12 @@ const App = () => {
         {client && (
           <AuthProvider client={client} type="custom">
             <ColorModeScript />
-            <ChakraProvider>
+            <ChakraProvider theme={theme}>
               <RedwoodApolloProvider>
                 <Web3Provider>
-                  <Routes />
+                  <CloudStorageProvider>
+                    <Routes />
+                  </CloudStorageProvider>
                 </Web3Provider>
               </RedwoodApolloProvider>
             </ChakraProvider>

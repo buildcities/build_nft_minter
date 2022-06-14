@@ -1,5 +1,5 @@
 import MediaSelector from './MediaSelector'
-import 'src/utils/firebase'
+import 'src/utils/firebase/api'
 export const generated = () => {
   return <MediaSelector name="nice-name" />
 }
