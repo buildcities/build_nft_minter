@@ -13,7 +13,7 @@
   ,'MORALIS_MASTER_KEY','ASSET_STORE_BASE_URL','ASSET_STORE_BASE_PATH'
   ,'SUPABASE_URL','SUPABASE_KEY','RAR_PRODUCTION','RAR_STAGING','CLOUDINARY_URL'
   ,'FUNCTIONS_PATH','PINATA_API_KEY','PINATA_API_SECRET','RINKEBY_TOKEN_CONTRACT','MAINNET_TOKEN_CONTRACT'
-  ,'DATABASE_URL','TEST_DATABASE_URL'] # any ENV vars that should be available to the web side, see https://redwoodjs.com/docs/environment-variables#web
+  ,'DATABASE_URL','TEST_DATABASE_URL','NODE_ENV'] # any ENV vars that should be available to the web side, see https://redwoodjs.com/docs/environment-variables#web
 [api]
   port = 8911
 [browser]
